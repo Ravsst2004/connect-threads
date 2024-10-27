@@ -1,7 +1,7 @@
 import React from "react";
 
-const HomePage = async () => {
-  return <div>LOL</div>;
+const Home = async () => {
+  return <div>test</div>;
 };
 
-export default HomePage;
+export default Home;

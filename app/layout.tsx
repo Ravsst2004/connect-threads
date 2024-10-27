@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Navigation from "@/components/navbar/navigation";
 
 export const metadata: Metadata = {
   title: "Connect Threads",
@@ -14,7 +15,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="font-poppins max-w-3xl mx-auto antialiased">
+      <body className="max-w-screen-sm mx-auto antialiased font-poppins">
+        <Navigation />
         <main>{children}</main>
       </body>
     </html>
