@@ -1,5 +1,4 @@
 import Link from "next/link";
-import React from "react";
 
 interface NavLinkProps {
   href: string;
@@ -11,7 +10,7 @@ const NavLink = ({ href, icon: Icon, className }: NavLinkProps) => {
   return (
     <li>
       <Link href={href}>
-        <Icon className={`w-10 h-10 ${className}`} />
+        <Icon className={`w-7 h-7 ${className}`} />
       </Link>
     </li>
   );

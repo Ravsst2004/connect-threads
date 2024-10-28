@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navigation from "@/components/navbar/navigation";
+import Navigation from "@/components/header/navigation";
+import Header from "@/components/header/header";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 
 export const metadata: Metadata = {
   title: "Connect Threads",
@@ -14,10 +16,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="max-w-screen-sm mx-auto antialiased font-poppins">
-        <Navigation />
-        <main>{children}</main>
+    <html lang="en" suppressHydrationWarning>
+      <body className="antialiased font-poppins">
+        <div className="max-w-screen-sm mx-auto ">
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Header />
+            <main>{children}</main>
+            <Navigation />
+          </ThemeProvider>
+        </div>
       </body>
     </html>
   );
