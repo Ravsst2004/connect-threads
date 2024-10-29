@@ -1,9 +1,5 @@
 "use client";
 
-import { registrationSchema } from "@/lib/zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,24 +9,26 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { signUp as signUpAction } from "@/lib/actions/auth";
+import { loginSchema } from "@/lib/zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Input } from "../ui/input";
+import { z } from "zod";
 import { startTransition, useActionState } from "react";
+import { login as signInAction } from "@/lib/actions/auth";
 
-const RegistrationForm = () => {
-  const [state, formAction] = useActionState(signUpAction, null);
+const LoginForm = () => {
+  const [state, formAction] = useActionState(signInAction, null);
 
-  const form = useForm<z.infer<typeof registrationSchema>>({
-    resolver: zodResolver(registrationSchema),
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
-      name: "Jro Datuk Putra",
       email: "",
       password: "",
-      confirmPassword: "",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof registrationSchema>) => {
+  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     startTransition(() => formAction(values));
   };
 
@@ -41,19 +39,6 @@ const RegistrationForm = () => {
       )}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Jro Datuk Putra" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <FormField
             control={form.control}
             name="email"
@@ -84,22 +69,9 @@ const RegistrationForm = () => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="confirmPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
-                <FormControl>
-                  <Input placeholder="********" type="password" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
 
           <Button type="submit" className="w-full">
-            Submit
+            Login
           </Button>
         </form>
       </Form>
@@ -107,4 +79,4 @@ const RegistrationForm = () => {
   );
 };
 
-export default RegistrationForm;
+export default LoginForm;

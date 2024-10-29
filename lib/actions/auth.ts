@@ -1,10 +1,13 @@
 "use server";
 
 import { z } from "zod";
-import { registrationSchema } from "../zod";
-import prisma from "@/prisma/db";
+import { loginSchema, registrationSchema } from "../zod";
+import { prisma } from "@/prisma/db";
 import { Config, uniqueUsernameGenerator } from "unique-username-generator";
 import { redirect } from "next/navigation";
+import { hashSync } from "bcrypt-ts";
+import { signIn } from "@/auth";
+import { AuthError } from "next-auth";
 
 const generateUniqueUsername = async (name: string) => {
   const splitName = name.split(" ");
@@ -30,7 +33,10 @@ const generateUniqueUsername = async (name: string) => {
   return username;
 };
 
-export async function signUp(values: z.infer<typeof registrationSchema>) {
+export async function signUp(
+  prevState: unknown,
+  values: z.infer<typeof registrationSchema>
+) {
   const { name, email, password } = values;
 
   const existingEmail = await prisma.user.findUnique({
@@ -41,10 +47,11 @@ export async function signUp(values: z.infer<typeof registrationSchema>) {
 
   if (existingEmail) {
     return {
-      error: "EXISTING_EMAIL",
       message: "Email already registered. Please use a different email.",
     };
   }
+
+  const hashedPassword = hashSync(password, 10);
 
   const username = await generateUniqueUsername(name);
 
@@ -58,15 +65,39 @@ export async function signUp(values: z.infer<typeof registrationSchema>) {
     throw new Error("Role 'user' not found");
   }
 
-  const user = await prisma.user.create({
+  await prisma.user.create({
     data: {
       name: name,
       username: username,
       email: email,
-      password: password,
+      password: hashedPassword,
       roleId: role.id,
     },
   });
 
-  redirect("/");
+  redirect("/login");
+}
+
+export async function login(
+  prevState: unknown,
+  values: z.infer<typeof loginSchema>
+) {
+  const { email, password } = values;
+
+  try {
+    await signIn("credentials", { email, password, redirectTo: "/" });
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return {
+            message: "Invalid credentials",
+          };
+        default:
+          return {
+            message: "Something went wrong, please check your credentials",
+          };
+      }
+    }
+  }
 }
