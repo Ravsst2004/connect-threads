@@ -31,6 +31,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           where: {
             email,
           },
+          include: {
+            role: true,
+          },
         });
 
         if (!user || !user.password) {
@@ -41,7 +44,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if (!passwordMatch) return null;
 
-        return user;
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role.name,
+        };
       },
     }),
   ],
@@ -50,6 +58,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const isLoggedIn = !!auth?.user;
       const protectedRoutes = ["/profile", "/notifications", "/add-thread"];
       const authenticatedRoutes = ["/login", "/registration"];
+      const adminRoutes = ["/admin", "/admin/users", "/admin/threads"];
 
       if (!isLoggedIn && protectedRoutes.includes(nextUrl.pathname)) {
         return Response.redirect(new URL("/login", nextUrl));
@@ -59,7 +68,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return Response.redirect(new URL("/", nextUrl));
       }
 
+      if (
+        (isLoggedIn &&
+          adminRoutes.includes(nextUrl.pathname) &&
+          auth.user?.role !== "admin") ||
+        (!isLoggedIn && adminRoutes.includes(nextUrl.pathname))
+      ) {
+        return Response.redirect(new URL("/error", nextUrl));
+      }
+
       return true;
+    },
+    async jwt({ token, user }) {
+      if (user) token.role = user.role;
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user.role = token.role;
+      }
+      return session;
     },
   },
 });

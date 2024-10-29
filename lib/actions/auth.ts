@@ -85,9 +85,12 @@ export async function login(
   const { email, password } = values;
 
   try {
-    //TODO: fix redirect to profile page is not working
-    await signIn("credentials", { email, password });
-    redirect("/profile");
+    await signIn("credentials", {
+      email,
+      password,
+      redirectTo: "/",
+      redirect: true,
+    });
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
