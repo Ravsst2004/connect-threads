@@ -45,4 +45,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  callbacks: {
+    authorized: async ({ auth, request: { nextUrl } }) => {
+      const isLoggedIn = !!auth?.user;
+      const protectedRoutes = ["/profile", "/notifications", "/add-thread"];
+      const authenticatedRoutes = ["/login", "/registration"];
+
+      if (!isLoggedIn && protectedRoutes.includes(nextUrl.pathname)) {
+        return Response.redirect(new URL("/login", nextUrl));
+      }
+
+      if (isLoggedIn && authenticatedRoutes.includes(nextUrl.pathname)) {
+        return Response.redirect(new URL("/", nextUrl));
+      }
+
+      return true;
+    },
+  },
 });
