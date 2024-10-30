@@ -8,9 +8,10 @@ const Home = async () => {
   return (
     <div>
       {session?.user?.name}
-      <p>{JSON.stringify(session)}</p>
+      {/* <p>{JSON.stringify(session)}</p> */}
     </div>
   );
 };
 
 export default Home;
+ 

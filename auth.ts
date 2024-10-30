@@ -4,6 +4,8 @@ import Credentials from "next-auth/providers/credentials";
 import { prisma } from "./prisma/db";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { loginSchema } from "./lib/zod";
+import Google from "next-auth/providers/google";
+import { generateUniqueUsername } from "./lib/actions/auth";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -14,42 +16,50 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/login",
   },
   providers: [
+    Google,
+    // Google({
+    //   clientId: process.env.GOOGLE_CLIENT_ID,
+    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    //   async profile(profile) {
+    //     const { name, email } = profile;
+
+    //     let user = await prisma.user.findUnique({
+    //       where: { email: email },
+    //     });
+
+    //     if (!user) {
+    //       const username = await generateUniqueUsername(name);
+    //       const role = await prisma.role.findUnique({
+    //         where: { name: "user" },
+    //       });
+
+    //       if (!role) {
+    //         throw new Error("Role 'user' not found");
+    //       }
+
+    //       user = await prisma.user.create({
+    //         data: {
+    //           name: name,
+    //           username: username,
+    //           email: email,
+    //           password: null,
+    //           roleId: role.id,
+    //         },
+    //       });
+    //     }
+
+    //     const userWithRole = {
+    //       ...user,
+    //       role: { id: user.roleId, name: "user" },
+    //     };
+
+    //     return userWithRole;
+    //   },
+    // }),
     Credentials({
       credentials: {
         email: {},
         password: {},
-      },
-      authorize: async (credentials) => {
-        const validatedFields = loginSchema.safeParse(credentials);
-
-        if (!validatedFields.success) {
-          return null;
-        }
-        const { email, password } = validatedFields.data;
-
-        const user = await prisma.user.findUnique({
-          where: {
-            email,
-          },
-          include: {
-            role: true,
-          },
-        });
-
-        if (!user || !user.password) {
-          throw new Error("User not found");
-        }
-
-        const passwordMatch = compareSync(password, user.password);
-
-        if (!passwordMatch) return null;
-
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role.name,
-        };
       },
     }),
   ],

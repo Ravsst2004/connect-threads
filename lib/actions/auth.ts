@@ -9,7 +9,7 @@ import { hashSync } from "bcrypt-ts";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 
-const generateUniqueUsername = async (name: string) => {
+export const generateUniqueUsername = async (name: string) => {
   const splitName = name.split(" ");
   const config: Config = {
     dictionaries: [splitName],
