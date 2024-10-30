@@ -16,6 +16,7 @@ import { Input } from "../ui/input";
 import { z } from "zod";
 import { startTransition, useActionState } from "react";
 import { login as signInAction } from "@/lib/actions/auth";
+import Link from "next/link";
 
 const LoginForm = () => {
   const [state, formAction] = useActionState(signInAction, null);
@@ -30,7 +31,6 @@ const LoginForm = () => {
 
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     startTransition(() => formAction(values));
-    
   };
 
   return (
@@ -70,6 +70,13 @@ const LoginForm = () => {
               </FormItem>
             )}
           />
+
+          <div>
+            Don&apos;t have an account?{" "}
+            <Link href="registration" className="text-blue-500">
+              Sign Up
+            </Link>
+          </div>
 
           <Button type="submit" className="w-full">
             Login
