@@ -18,11 +18,10 @@ import { z } from "zod";
 import { Textarea } from "../ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect } from "react";
-import { redirect } from "next/navigation";
 
 interface EditFormProps {
   email: string | undefined | null;
-  onClose?: (status: boolean) => void;
+  onClose?: () => void;
 }
 
 const EditForm = ({ email, onClose }: EditFormProps) => {
@@ -64,7 +63,9 @@ const EditForm = ({ email, onClose }: EditFormProps) => {
         variant: "default",
       });
     }
-    onClose();
+    if (onClose) {
+      onClose();
+    }
   };
 
   return (

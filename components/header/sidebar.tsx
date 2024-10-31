@@ -1,10 +1,10 @@
 import { House, Search, Blocks, Heart, User } from "lucide-react";
 import NavLink from "./nav-link";
 
-const Navigation = () => {
+const Sidebar = () => {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 max-w-screen-sm mx-auto p-2 md:hidden">
-      <ul className="flex items-center justify-between gap-10 py-4 px-8 border rounded-2xl bg-secondary">
+    <nav className="fixed left-0 top-1/3 p-2 hidden md:block">
+      <ul className="flex flex-col items-center justify-between gap-10 py-4 px-8 border rounded-2xl bg-secondary">
         <NavLink href="/" icon={House} />
         <NavLink href="/search" icon={Search} />
         <NavLink href="/blocks" icon={Blocks} />
@@ -15,4 +15,4 @@ const Navigation = () => {
   );
 };
 
-export default Navigation;
+export default Sidebar;

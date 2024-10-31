@@ -4,6 +4,7 @@ import Navigation from "@/components/header/navigation";
 import Header from "@/components/header/header";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import Sidebar from "@/components/header/sidebar";
 
 export const metadata: Metadata = {
   title: "Connect Threads",
@@ -19,7 +20,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased font-poppins">
-        <div className="max-w-screen-sm mx-auto ">
+        <Sidebar />
+        <div className="max-w-screen-sm mx-auto border rounded-xl">
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"

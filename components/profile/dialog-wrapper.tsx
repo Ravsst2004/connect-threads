@@ -12,7 +12,6 @@ import { buttonVariants } from "../ui/button";
 interface DialogWrapperProps {
   triggerText: string;
   children: React.ReactElement;
-  onDialogClose: () => void;
 }
 
 const DialogWrapper = ({ triggerText, children }: DialogWrapperProps) => {
