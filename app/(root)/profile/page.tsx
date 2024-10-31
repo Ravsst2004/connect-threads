@@ -1,8 +1,8 @@
 import { auth } from "@/auth";
-import { Button } from "@/components/ui/button";
 import { prisma } from "@/prisma/db";
 import Image from "next/image";
 import ThreadsContent from "../../../components/profile/threads-content";
+import EditDialog from "@/components/profile/edit-dialog";
 
 const Profile = async () => {
   const session = await auth();
@@ -34,7 +34,7 @@ const Profile = async () => {
         </div>
         <p>{user?.bio || "No bio"}</p>
         <p className="text-gray-500 opacity-75">14 followers</p>
-        <Button className="mt-4 w-full">Edit Profile</Button>
+        <EditDialog />
       </div>
       <div className="mt-4">
         <ThreadsContent />

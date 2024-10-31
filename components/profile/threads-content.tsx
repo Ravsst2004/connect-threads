@@ -23,6 +23,8 @@ const ThreadsContent = () => {
             cumque ea?"
           />
           <ThreadsCard content="Make an awesome logo." images={images} />
+          <ThreadsCard content="Make an awesome logo." images={images} />
+          <ThreadsCard content="Make an awesome logo." images={images} />
         </TabsContent>
         <TabsContent value="reply">Your reply here.</TabsContent>
       </Tabs>

@@ -22,3 +22,15 @@ export const loginSchema = object({
     .min(6, "Password must be at least 6 characters long")
     .max(20, "Password must be less than 20 characters long"),
 });
+
+export const editUserSchema = object({
+  email: string().email("Invalid email address"),
+  name: string()
+    .min(4, "Name must be at least 4 characters long")
+    .max(255, "Name must be less than 255 characters long"),
+  username: string()
+    .min(4, "Username must be at least 4 characters long")
+    .max(15, "Username must be less than 15 characters long")
+    .regex(/^\S*$/, "Username cannot contain spaces"),
+  bio: string().max(255, "Bio must be less than 255 characters long"),
+});

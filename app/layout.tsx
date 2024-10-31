@@ -3,6 +3,7 @@ import "./globals.css";
 import Navigation from "@/components/header/navigation";
 import Header from "@/components/header/header";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Connect Threads",
@@ -28,6 +29,7 @@ export default function RootLayout({
             <Header />
             <main>{children}</main>
             <Navigation />
+            <Toaster />
           </ThemeProvider>
         </div>
       </body>
