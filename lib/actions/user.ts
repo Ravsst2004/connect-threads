@@ -32,10 +32,7 @@ export async function updateUser(values: z.infer<typeof editUserSchema>) {
 
   const userDetails = await getUser(email);
 
-  let imageUrl = "";
-
-  // console.log(userDetails.image);
-  // return;
+  let imageUrl = userDetails.image || "";
 
   if (userDetails.image) {
     try {
@@ -71,7 +68,7 @@ export async function updateUser(values: z.infer<typeof editUserSchema>) {
       name,
       username,
       bio,
-      image: imageUrl || undefined,
+      image: imageUrl || null,
     },
   });
 

@@ -42,13 +42,18 @@ export const editUserSchema = object({
     .regex(/^\S*$/, "Username cannot contain spaces"),
   bio: string().max(255, "Bio must be less than 255 characters long"),
   image: any()
-    .nullable()
     .refine((files) => {
-      return files === null || files?.[0]?.size <= MAX_FILE_SIZE;
+      return (
+        files === undefined ||
+        files === null ||
+        files?.[0]?.size <= MAX_FILE_SIZE
+      );
     }, `Max image size is 2MB.`)
     .refine(
       (files) =>
-        files === null || ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
-      "Only .jpg, .jpeg, .png and .webp formats are supported."
+        files === undefined ||
+        files === null ||
+        ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
+      "Only .jpg, .jpeg, .png, and .webp formats are supported."
     ),
 });

@@ -54,7 +54,6 @@ const EditForm = ({ email, onClose }: EditFormProps) => {
           username: userData.username,
           bio: userData.bio || "",
           email: userData.email,
-          image: userData.image,
         });
       }
     };
