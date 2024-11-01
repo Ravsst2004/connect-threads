@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -17,7 +17,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Textarea } from "../ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { BsPaperclip } from "react-icons/bs";
+import { convertFileToBase64 } from "@/lib/actions/convertFileToBase64 ";
 
 interface EditFormProps {
   email: string | undefined | null;
@@ -25,6 +28,9 @@ interface EditFormProps {
 }
 
 const EditForm = ({ email, onClose }: EditFormProps) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [currentImage, setCurrentImage] = useState<string | null>(null);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof editUserSchema>>({
@@ -34,6 +40,7 @@ const EditForm = ({ email, onClose }: EditFormProps) => {
       name: "",
       username: "",
       bio: "",
+      image: undefined,
     },
   });
 
@@ -41,11 +48,13 @@ const EditForm = ({ email, onClose }: EditFormProps) => {
     const fetchUserData = async () => {
       if (email) {
         const userData = await getUser(email);
+        setCurrentImage(userData.image);
         form.reset({
           name: userData.name,
           username: userData.username,
           bio: userData.bio || "",
           email: userData.email,
+          image: userData.image,
         });
       }
     };
@@ -54,6 +63,11 @@ const EditForm = ({ email, onClose }: EditFormProps) => {
   }, [email, form]);
 
   const onSubmit = async (values: z.infer<typeof editUserSchema>) => {
+    setIsLoading(true);
+
+    if (selectedImage) {
+      values.image = await convertFileToBase64(selectedImage);
+    }
     const result = await updateUser(values);
 
     if (result) {
@@ -65,13 +79,99 @@ const EditForm = ({ email, onClose }: EditFormProps) => {
     }
     if (onClose) {
       onClose();
+      setIsLoading(false);
     }
   };
+
+  const imageDisplay = (
+    <>
+      {selectedImage ? (
+        <div className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center">
+          <Image
+            src={URL.createObjectURL(selectedImage)}
+            width={80}
+            height={80}
+            alt="Selected"
+            className="object-cover w-full h-full"
+          />
+        </div>
+      ) : (
+        <div className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center">
+          <Image
+            src={currentImage || "/images/user-profile.png"}
+            alt="profile"
+            width={80}
+            height={80}
+            className="object-cover w-full h-full"
+          />
+        </div>
+      )}
+    </>
+  );
 
   return (
     <section>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <div
+            className={`flex w-[100%] gap-4 p-4 rounded border border-neutral-200 flex-col items-center md:flex-row md:justify-between md:items-center`}
+          >
+            <div
+              className={`flex  md:flex-[1] h-[fit-content] md:p-4 md:justify-between md:flex-row 
+                        
+            `}
+            >
+              {imageDisplay}
+            </div>
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      className="hidden"
+                      id="fileInput"
+                      accept="image/*"
+                      onBlur={field.onBlur}
+                      name={field.name}
+                      onChange={(e) => {
+                        field.onChange(e.target.files);
+                        setSelectedImage(e.target.files?.[0] || null);
+                      }}
+                      ref={field.ref}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <label
+              htmlFor="fileInput"
+              className={`${buttonVariants({
+                variant: "default",
+              })} text-neutral-90  rounded-md cursor-pointer inline-flex items-center`}
+            >
+              <BsPaperclip />
+              <span className="whitespace-nowrap">choose your image</span>
+            </label>
+          </div>
+
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="hidden">
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input type="email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="email"
@@ -125,8 +225,8 @@ const EditForm = ({ email, onClose }: EditFormProps) => {
             )}
           />
 
-          <Button type="submit" className="w-full">
-            Save
+          <Button type="submit" disabled={isLoading} className="w-full">
+            {isLoading ? "Saving..." : "Save"}
           </Button>
         </form>
       </Form>

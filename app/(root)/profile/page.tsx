@@ -23,12 +23,13 @@ const Profile = async () => {
             <h1 className="text-2xl font-bold">{user?.name}</h1>
             <p className="font-medium text-lg">{user?.username}</p>
           </div>
-          <div>
+          <div className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center">
             <Image
               src={user?.image || "/images/user-profile.png"}
               alt="profile"
               width={80}
               height={80}
+              className="object-cover w-full h-full"
             />
           </div>
         </div>
