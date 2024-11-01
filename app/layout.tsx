@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased font-poppins">
         <Sidebar />
-        <div className="max-w-screen-sm mx-auto border rounded-xl">
+        <div className="max-w-screen-sm min-h-svh mx-auto border-x">
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"

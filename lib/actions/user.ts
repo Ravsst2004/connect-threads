@@ -2,7 +2,7 @@
 
 import { prisma } from "@/prisma/db";
 import { z } from "zod";
-import { editUserSchema } from "../zod";
+import { editUserSchema } from "../validations/authSchema";
 import { revalidatePath } from "next/cache";
 import cloudinary from "../config/cloudinary";
 

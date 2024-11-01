@@ -3,7 +3,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "./prisma/db";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { loginSchema } from "./lib/zod";
+import { loginSchema } from "./lib/validations/authSchema";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -57,7 +57,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     authorized: async ({ auth, request: { nextUrl } }) => {
       const isLoggedIn = !!auth?.user;
-      const protectedRoutes = ["/profile", "/notifications", "/add-thread"];
+      const protectedRoutes = ["/profile", "/notifications", "/create-thread"];
       const authenticatedRoutes = ["/login", "/registration"];
       const adminRoutes = ["/admin", "/admin/users", "/admin/threads"];
 

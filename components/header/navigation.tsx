@@ -1,4 +1,4 @@
-import { House, Search, Blocks, Heart, User } from "lucide-react";
+import { House, Search, Heart, User, SquareArrowOutUpRight } from "lucide-react";
 import NavLink from "./nav-link";
 
 const Navigation = () => {
@@ -7,7 +7,7 @@ const Navigation = () => {
       <ul className="flex items-center justify-between gap-10 py-4 px-8 border rounded-2xl bg-secondary">
         <NavLink href="/" icon={House} />
         <NavLink href="/search" icon={Search} />
-        <NavLink href="/blocks" icon={Blocks} />
+        <NavLink href="/create-thread" icon={SquareArrowOutUpRight} />
         <NavLink href="/notifications" icon={Heart} />
         <NavLink href="/profile" icon={User} />
       </ul>
