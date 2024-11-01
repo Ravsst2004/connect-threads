@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { signUp as signUpAction } from "@/lib/actions/auth";
 import { startTransition, useActionState } from "react";
+import Link from "next/link";
 
 const RegistrationForm = () => {
   const [state, formAction] = useActionState(signUpAction, null);
@@ -97,6 +98,13 @@ const RegistrationForm = () => {
               </FormItem>
             )}
           />
+
+          <div>
+            Already have an account?{" "}
+            <Link href="login" className="text-blue-500">
+              Sign in
+            </Link>
+          </div>
 
           <Button type="submit" className="w-full">
             Submit

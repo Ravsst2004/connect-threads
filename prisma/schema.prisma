@@ -14,16 +14,17 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
+  id        String    @id @default(cuid())
   username  String    @unique
   name      String
   email     String    @unique
-  password  String?
+  password  String
+  image     String?
   phone     String?
   bio       String?
   threads   Thread[]
   comments  Comment[]
-  roleId    Int
+  roleId    String
   role      Role      @relation(fields: [roleId], references: [id])
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -31,7 +32,7 @@ model User {
 }
 
 model Role {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -39,8 +40,8 @@ model Role {
 }
 
 model Thread {
-  id         Int       @id @default(autoincrement())
-  authorId   Int
+  id         String    @id @default(cuid())
+  authorId   String
   content    String
   totalLikes Int
   image      String?
@@ -52,9 +53,9 @@ model Thread {
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  threadId  Int
+  id        String   @id @default(cuid())
+  userId    String
+  threadId  String
   content   String
   user      User     @relation(fields: [userId], references: [id])
   thread    Thread   @relation(fields: [threadId], references: [id])
@@ -63,8 +64,8 @@ model Comment {
 }
 
 model Like {
-  userId    Int
-  threadId  Int
+  userId    String
+  threadId  String
   user      User     @relation(fields: [userId], references: [id])
   thread    Thread   @relation(fields: [threadId], references: [id])
   createdAt DateTime @default(now())
