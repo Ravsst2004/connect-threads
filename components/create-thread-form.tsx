@@ -33,22 +33,21 @@ const CreateThreadForm = ({ userId }: CreateThreadFormProps) => {
     defaultValues: {
       userId: userId || "",
       content: "",
-      image: [],
+      images: [],
     },
   });
 
   const onSubmit = async (values: z.infer<typeof createThreadSchema>) => {
     // TODO: handle multiple images upload
     if (selectedImage && selectedImage.length > 0) {
-      values.image = await Promise.all(
+      values.images = await Promise.all(
         Array.from(selectedImage).map((file) => convertFileToBase64(file))
       );
-      console.log(values.image);
+      // console.log(values.image);
     } else {
-      values.image = [];
+      values.images = [];
     }
 
-    // return;
     const result = await createThread(values);
 
     if (result) {
@@ -117,7 +116,7 @@ const CreateThreadForm = ({ userId }: CreateThreadFormProps) => {
 
           <FormField
             control={form.control}
-            name="image"
+            name="images"
             render={({ field }) => (
               <FormItem>
                 <FormControl>

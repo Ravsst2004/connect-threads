@@ -67,6 +67,7 @@ const EditForm = ({ email, onClose }: EditFormProps) => {
     if (selectedImage) {
       values.image = await convertFileToBase64(selectedImage);
     }
+
     const result = await updateUser(values);
 
     if (result) {
