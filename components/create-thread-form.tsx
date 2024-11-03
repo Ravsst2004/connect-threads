@@ -33,7 +33,7 @@ const CreateThreadForm = ({ userId }: CreateThreadFormProps) => {
     defaultValues: {
       userId: userId || "",
       content: "",
-      images: [],
+      images: "",
     },
   });
 
@@ -43,7 +43,6 @@ const CreateThreadForm = ({ userId }: CreateThreadFormProps) => {
       values.images = await Promise.all(
         Array.from(selectedImage).map((file) => convertFileToBase64(file))
       );
-      // console.log(values.image);
     } else {
       values.images = [];
     }
@@ -53,7 +52,7 @@ const CreateThreadForm = ({ userId }: CreateThreadFormProps) => {
     if (result) {
       form.reset();
       toast({
-        description: "Profile updated successfully",
+        description: "Thread created successfully",
         title: "Success",
         variant: "default",
       });
@@ -114,6 +113,14 @@ const CreateThreadForm = ({ userId }: CreateThreadFormProps) => {
             </div>
           )}
 
+          <label
+            htmlFor="fileInput"
+            className={`${buttonVariants({
+              variant: "default",
+            })} text-neutral-90  rounded-md cursor-pointer inline-flex items-center`}
+          >
+            <FileImage />
+          </label>
           <FormField
             control={form.control}
             name="images"
@@ -140,14 +147,6 @@ const CreateThreadForm = ({ userId }: CreateThreadFormProps) => {
               </FormItem>
             )}
           />
-          <label
-            htmlFor="fileInput"
-            className={`${buttonVariants({
-              variant: "default",
-            })} text-neutral-90  rounded-md cursor-pointer inline-flex items-center`}
-          >
-            <FileImage />
-          </label>
 
           <Button type="submit" className="w-full">
             Post

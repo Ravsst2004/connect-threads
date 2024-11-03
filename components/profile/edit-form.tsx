@@ -10,7 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { getUser, updateUser } from "@/lib/actions/user";
+import { getUserByEmail, updateUser } from "@/lib/actions/user";
 import { editUserSchema } from "@/lib/validations/editUserSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -47,7 +47,7 @@ const EditForm = ({ email, onClose }: EditFormProps) => {
   useEffect(() => {
     const fetchUserData = async () => {
       if (email) {
-        const userData = await getUser(email);
+        const userData = await getUserByEmail(email);
         setCurrentImage(userData.image);
         form.reset({
           name: userData.name || "",

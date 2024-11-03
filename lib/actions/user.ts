@@ -6,15 +6,15 @@ import { editUserSchema } from "../validations/editUserSchema";
 import { revalidatePath } from "next/cache";
 import cloudinary from "../config/cloudinary";
 
-export async function getUser(email: string | undefined) {
+export async function getUserByEmail(email: string | undefined) {
   const user = await prisma.user.findUnique({
     where: {
       email,
     },
     select: {
-      email: true,
       name: true,
       username: true,
+      email: true,
       bio: true,
       image: true,
     },
@@ -30,7 +30,7 @@ export async function getUser(email: string | undefined) {
 export async function updateUser(values: z.infer<typeof editUserSchema>) {
   const { email, name, username, bio, image } = values;
 
-  const userDetails = await getUser(email);
+  const userDetails = await getUserByEmail(email);
 
   let imageUrl = userDetails.image || "";
 

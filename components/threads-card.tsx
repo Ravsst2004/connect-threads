@@ -1,12 +1,25 @@
+import { User } from "@prisma/client";
 import { Heart, MessageCircle, Repeat2, Send } from "lucide-react";
 import Image from "next/image";
 
 interface ThreadsCardProps {
   images?: string[];
   content: string;
+  user: User;
+  createdAt?: Date;
 }
 
-const ThreadsCard = ({ images, content }: ThreadsCardProps) => {
+const ThreadsCard = ({
+  images,
+  content,
+  user,
+  createdAt,
+}: ThreadsCardProps) => {
+  const formattedDate = createdAt?.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
   return (
     <section>
       <div className="w-full border-b border-white pt-2" />
@@ -20,11 +33,11 @@ const ThreadsCard = ({ images, content }: ThreadsCardProps) => {
               height={30}
             />
             <h1 className="flex items-center gap-4">
-              <span className="font-semibold">Jro Datuk</span>{" "}
-              <span className="text-gray-500 ">10/10/2022</span>
+              <span className="font-semibold">{user.username}</span>{" "}
+              <span className="text-gray-500 ">{formattedDate}</span>
             </h1>
           </div>
-          <div id="content">
+          <div id="content" className="py-2">
             <p>{content}</p>
             {images && images.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">

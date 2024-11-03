@@ -1,9 +1,21 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import ThreadsCard from "../threads-card";
+import { prisma } from "@/prisma/db";
 
-const ThreadsContent = () => {
-  const images = ["/images/logo-white.webp"];
+interface ThreadsContentProps {
+  email: string | undefined | null;
+}
+
+const ThreadsContent = async ({ email }: ThreadsContentProps) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      email: email || undefined,
+    },
+    include: {
+      threads: true,
+    },
+  });
 
   return (
     <div>
@@ -17,14 +29,19 @@ const ThreadsContent = () => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="threads">
-          <ThreadsCard
-            content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi
-            facilis eum, esse sunt voluptas odio excepturi maxime. Laboriosam,
-            cumque ea?"
-          />
-          <ThreadsCard content="Make an awesome logo." images={images} />
-          <ThreadsCard content="Make an awesome logo." images={images} />
-          <ThreadsCard content="Make an awesome logo." images={images} />
+          {user && user.threads && user.threads.length > 0 ? (
+            user.threads.map((thread) => (
+              <ThreadsCard
+                key={thread.id}
+                content={thread.content}
+                images={thread.images}
+                createdAt={thread.createdAt}
+                user={user}
+              />
+            ))
+          ) : (
+            <div>No Threads</div>
+          )}
         </TabsContent>
         <TabsContent value="reply">Your reply here.</TabsContent>
       </Tabs>

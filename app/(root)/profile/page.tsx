@@ -38,7 +38,7 @@ const Profile = async () => {
         <EditDialog />
       </div>
       <div className="mt-4">
-        <ThreadsContent />
+        <ThreadsContent email={session?.user?.email} />
       </div>
     </section>
   );

@@ -14,7 +14,7 @@ const CreateThread = async () => {
   });
 
   return (
-    <section className="w-[80%] mx-auto border rounded-xl ">
+    <section className="w-[80%] mx-auto border rounded-xl mb-28">
       <div className="p-4 border-b">Create Thread</div>
       <CreateThreadForm userId={user?.id} />
     </section>
