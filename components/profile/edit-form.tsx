@@ -40,7 +40,7 @@ const EditForm = ({ email, onClose }: EditFormProps) => {
       name: "",
       username: "",
       bio: "",
-      image: undefined,
+      image: "",
     },
   });
 
@@ -50,10 +50,10 @@ const EditForm = ({ email, onClose }: EditFormProps) => {
         const userData = await getUser(email);
         setCurrentImage(userData.image);
         form.reset({
-          name: userData.name,
-          username: userData.username,
+          name: userData.name || "",
+          username: userData.username || "",
           bio: userData.bio || "",
-          email: userData.email,
+          email: userData.email || "",
         });
       }
     };

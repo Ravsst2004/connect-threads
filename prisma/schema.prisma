@@ -13,41 +13,52 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String    @id @default(cuid())
-  username  String    @unique
-  name      String
-  email     String    @unique
-  password  String
-  image     String?
-  phone     String?
-  bio       String?
-  threads   Thread[]
-  comments  Comment[]
-  roleId    String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  likes     Like[]
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
-  role Role @relation(fields: [roleId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
 }
 
-model Role {
-  id        String   @id @default(cuid())
-  name      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  users     User[]
+model User {
+  id            String    @id @default(cuid())
+  username      String?   @unique
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime? @map("email_verified")
+  password      String?
+  image         String?
+  phone         String?
+  bio           String?
+  role          String    @default("user")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  threads       Thread[]
+  comments      Comment[]
+  likes         Like[]
+  Account       Account[]
 }
 
 model Thread {
   id         String    @id @default(cuid())
   authorId   String
   content    String    @db.Text
-  totalLikes Int
-  images     String[]
+  totalLikes Int       @map("total_likes")
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
+  images     String[]
   comments   Comment[]
   likes      Like[]
 
@@ -56,8 +67,8 @@ model Thread {
 
 model Comment {
   id        String   @id @default(cuid())
-  userId    String
-  threadId  String
+  userId    String   @map("user_id")
+  threadId  String   @map("thread_id")
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
