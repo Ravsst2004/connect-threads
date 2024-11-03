@@ -4,6 +4,8 @@ import Credentials from "next-auth/providers/credentials";
 import { prisma } from "./prisma/db";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { loginSchema } from "./lib/validations/authSchema";
+import Google from "next-auth/providers/google";
+import { generateUniqueUsername } from "./lib/actions/auth";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -14,6 +16,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/login",
   },
   providers: [
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      profile: async (profile) => {
+        return {
+          id: profile.sub,
+          email: profile.email,
+          name: profile.name,
+          image: profile.picture,
+        };
+      },
+    }),
     Credentials({
       credentials: {
         email: {},
@@ -31,9 +45,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           where: {
             email,
           },
-          include: {
-            role: true,
-          },
         });
 
         if (!user || !user.password) {
@@ -49,7 +60,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           username: user.username,
           name: user.name,
           email: user.email,
-          role: user.role.name,
         };
       },
     }),
@@ -80,8 +90,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return true;
     },
-    async jwt({ token, user }) {
-      if (user) token.role = user.role;
+    async jwt({ token, user, account }) {
+      if (account && account.provider === "google") {
+        let userInDb = await prisma.user.findUnique({
+          where: { email: user.email },
+        });
+
+        // Jika user belum memiliki username, generate dan simpan di database
+        if (userInDb && !userInDb.username) {
+          const generatedUsername = await generateUniqueUsername(user.name);
+          userInDb = await prisma.user.update({
+            where: { email: user.email },
+            data: { username: generatedUsername },
+          });
+        }
+
+        token.username = userInDb.username; // Simpan username di token
+      }
       return token;
     },
     async session({ session, token }) {

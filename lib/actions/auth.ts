@@ -9,7 +9,7 @@ import { hashSync } from "bcrypt-ts";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 
-const generateUniqueUsername = async (name: string) => {
+export const generateUniqueUsername = async (name: string) => {
   const splitName = name.split(" ");
   const config: Config = {
     dictionaries: [splitName],
@@ -55,23 +55,12 @@ export async function signUp(
 
   const username = await generateUniqueUsername(name);
 
-  const role = await prisma.role.findUnique({
-    where: {
-      name: "user",
-    },
-  });
-
-  if (!role) {
-    throw new Error("Role 'user' not found");
-  }
-
   await prisma.user.create({
     data: {
       name: name,
       username: username,
       email: email,
       password: hashedPassword,
-      roleId: role.id,
     },
   });
 
