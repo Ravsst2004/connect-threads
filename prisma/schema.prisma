@@ -25,10 +25,11 @@ model User {
   threads   Thread[]
   comments  Comment[]
   roleId    String
-  role      Role      @relation(fields: [roleId], references: [id])
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   likes     Like[]
+
+  role Role @relation(fields: [roleId], references: [id])
 }
 
 model Role {
@@ -42,14 +43,15 @@ model Role {
 model Thread {
   id         String    @id @default(cuid())
   authorId   String
-  content    String
+  content    String    @db.Text
   totalLikes Int
-  image      String?
-  author     User      @relation(fields: [authorId], references: [id])
-  comments   Comment[]
+  images     String[]
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
+  comments   Comment[]
   likes      Like[]
+
+  author User @relation(fields: [authorId], references: [id])
 }
 
 model Comment {
@@ -57,19 +59,21 @@ model Comment {
   userId    String
   threadId  String
   content   String
-  user      User     @relation(fields: [userId], references: [id])
-  thread    Thread   @relation(fields: [threadId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  thread Thread @relation(fields: [threadId], references: [id])
 }
 
 model Like {
   userId    String
   threadId  String
-  user      User     @relation(fields: [userId], references: [id])
-  thread    Thread   @relation(fields: [threadId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  thread Thread @relation(fields: [threadId], references: [id])
 
   @@id([userId, threadId])
 }

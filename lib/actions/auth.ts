@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { loginSchema, registrationSchema } from "../zod";
+import { loginSchema, registrationSchema } from "../validations/authSchema";
 import { prisma } from "@/prisma/db";
 import { Config, uniqueUsernameGenerator } from "unique-username-generator";
 import { redirect } from "next/navigation";

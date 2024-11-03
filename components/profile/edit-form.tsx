@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { getUser, updateUser } from "@/lib/actions/user";
-import { editUserSchema } from "@/lib/zod";
+import { editUserSchema } from "@/lib/validations/editUserSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -67,6 +67,7 @@ const EditForm = ({ email, onClose }: EditFormProps) => {
     if (selectedImage) {
       values.image = await convertFileToBase64(selectedImage);
     }
+
     const result = await updateUser(values);
 
     if (result) {
@@ -171,19 +172,6 @@ const EditForm = ({ email, onClose }: EditFormProps) => {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem className="hidden">
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input type="email" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <FormField
             control={form.control}
             name="name"
