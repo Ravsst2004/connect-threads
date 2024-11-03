@@ -38,7 +38,11 @@ const Profile = async () => {
         <EditDialog />
       </div>
       <div className="mt-4">
-        <ThreadsContent email={session?.user?.email} />
+        <ThreadsContent
+          threads={user?.threads}
+          userImage={user?.image || ""}
+          username={user?.username || ""}
+        />
       </div>
     </section>
   );

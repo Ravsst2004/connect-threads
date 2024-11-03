@@ -1,22 +1,19 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import ThreadsCard from "../threads-card";
-import { prisma } from "@/prisma/db";
+import { Thread } from "@prisma/client";
 
 interface ThreadsContentProps {
-  email: string | undefined | null;
+  threads: Thread[] | null | undefined;
+  userImage: string;
+  username: string;
 }
 
-const ThreadsContent = async ({ email }: ThreadsContentProps) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      email: email || undefined,
-    },
-    include: {
-      threads: true,
-    },
-  });
-
+const ThreadsContent = ({
+  threads,
+  userImage,
+  username,
+}: ThreadsContentProps) => {
   return (
     <div>
       <Tabs defaultValue="threads">
@@ -29,14 +26,15 @@ const ThreadsContent = async ({ email }: ThreadsContentProps) => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="threads">
-          {user && user.threads && user.threads.length > 0 ? (
-            user.threads.map((thread) => (
+          {threads && threads.length > 0 ? (
+            threads.map((thread) => (
               <ThreadsCard
                 key={thread.id}
                 content={thread.content}
                 images={thread.images}
                 createdAt={thread.createdAt}
-                user={user}
+                userImage={userImage}
+                username={username}
               />
             ))
           ) : (
