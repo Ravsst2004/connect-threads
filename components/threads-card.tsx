@@ -5,8 +5,8 @@ interface ThreadsCardProps {
   images?: string[];
   content: string;
   createdAt?: Date;
-  userImage: string;
-  username: string;
+  userImage: string | null;
+  username: string | null;
 }
 
 const ThreadsCard = ({
@@ -24,10 +24,10 @@ const ThreadsCard = ({
   return (
     <section>
       <div className="w-full border-b border-white pt-2" />
-      <article className="py-2">
+      <article className="py-4">
         <div>
           <div id="user-info" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center">
               <Image
                 src={userImage || "/images/user-profile.png"}
                 alt="profile"

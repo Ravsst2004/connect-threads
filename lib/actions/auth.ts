@@ -6,7 +6,7 @@ import { prisma } from "@/prisma/db";
 import { Config, uniqueUsernameGenerator } from "unique-username-generator";
 import { redirect } from "next/navigation";
 import { hashSync } from "bcrypt-ts";
-import { signIn } from "@/auth";
+import { signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
 
 export const generateUniqueUsername = async (name: string) => {
@@ -74,12 +74,21 @@ export async function login(
   const { email, password } = values;
 
   try {
-    await signIn("credentials", {
+    // NOTE: This is a workaround for a bug in the next-auth library
+
+    const result = await signIn("credentials", {
       email,
       password,
-      redirectTo: "/",
-      redirect: true,
+      redirect: false,
     });
+
+    if (result?.error) {
+      return {
+        message: "Invalid credentials",
+      };
+    }
+
+    window.location.reload();
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
@@ -94,4 +103,8 @@ export async function login(
       }
     }
   }
+}
+
+export async function logout() {
+  await signOut({ redirectTo: "/login" });
 }

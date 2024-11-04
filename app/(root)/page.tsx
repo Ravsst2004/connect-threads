@@ -1,10 +1,11 @@
-import { auth } from "@/auth";
-import React from "react";
+import AllThreads from "@/components/all-threads";
 
-const Home = async () => {
-  const session = await auth();
-
-  return <div>{session?.user?.name}</div>;
+const Home = () => {
+  return (
+    <section className="px-2">
+      <AllThreads />
+    </section>
+  );
 };
 
 export default Home;

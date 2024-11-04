@@ -1,5 +1,3 @@
-"use client";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,32 +5,27 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Menu } from "lucide-react";
-import { useTheme } from "next-themes";
 
-const HamburgerMenu = () => {
-  const { setTheme } = useTheme();
+import ToggleTheme from "../toggle-theme";
+import { auth } from "@/auth";
+import LogoutButton from "../auth/logout-button";
 
+const HamburgerMenu = async () => {
+  const session = await auth();
   return (
-    <div className="">
+    <div>
       <DropdownMenu>
         <DropdownMenuTrigger>
           <Menu className="w-8 h-8 cursor-pointer" aria-hidden="true" />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="mr-2 mt-2">
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <DropdownMenuItem>Toggle theme</DropdownMenuItem>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="m-2">
-              <DropdownMenuItem onClick={() => setTheme("light")}>
-                Light
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("dark")}>
-                Dark
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <DropdownMenuItem className="cursor-pointer">
+            Settings
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer px-0">
+            <ToggleTheme />
+          </DropdownMenuItem>
+          {session && <LogoutButton />}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

@@ -17,9 +17,12 @@ import { z } from "zod";
 import { startTransition, useActionState } from "react";
 import { login as signInAction } from "@/lib/actions/auth";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
-const LoginForm = () => {
+const LoginForm = ({}) => {
   const [state, formAction] = useActionState(signInAction, null);
+  const searchParams = useSearchParams();
+  const errorParam = searchParams.get("error");
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -37,6 +40,11 @@ const LoginForm = () => {
     <div className="space-y-4">
       {state?.message && (
         <p className="border p-4 rounded-lg text-red-500">{state.message}</p>
+      )}
+      {errorParam === "OAuthAccountNotLinked" && (
+        <p className="border p-4 rounded-lg text-red-500">
+          Account already used by another provider
+        </p>
       )}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

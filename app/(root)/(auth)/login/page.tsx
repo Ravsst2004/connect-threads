@@ -2,7 +2,7 @@ import LoginForm from "@/components/auth/login-form";
 import { GoogleButton } from "@/components/auth/social-button";
 import React from "react";
 
-const Login = () => {
+const Login = ({}) => {
   return (
     <section className="flex flex-col gap-4 border rounded-lg mx-10 md:mx-24 p-4 mt-28">
       <h1 className="text-3xl font-bold">Login</h1>
