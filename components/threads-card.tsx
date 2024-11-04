@@ -1,5 +1,6 @@
 import { Heart, MessageCircle, Repeat2, Send } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface ThreadsCardProps {
   images?: string[];
@@ -21,9 +22,10 @@ const ThreadsCard = ({
     month: "long",
     day: "numeric",
   });
+
   return (
     <section>
-      <div className="w-full border-b border-white pt-2" />
+      <div className="w-full border-b border-primary dark:border-white pt-2" />
       <article className="py-4">
         <div>
           <div id="user-info" className="flex items-center gap-2">
@@ -37,7 +39,9 @@ const ThreadsCard = ({
               />
             </div>
             <h1 className="flex items-center gap-4">
-              <span className="font-semibold">{username}</span>{" "}
+              <Link href={`/@${username}`} className="font-semibold">
+                {username}
+              </Link>{" "}
               <span className="text-gray-500 ">{formattedDate}</span>
             </h1>
           </div>

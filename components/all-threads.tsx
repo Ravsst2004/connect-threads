@@ -1,10 +1,9 @@
-import { getThreadsWithUser } from "@/lib/actions/getThreadsWithUser";
+import { getThreadsWithUser } from "@/lib/actions/threads";
 import React from "react";
 import ThreadsCard from "./threads-card";
 
 const AllThreads = async () => {
   const threads = await getThreadsWithUser();
-  console.log(threads);
 
   return (
     <div>
@@ -17,7 +16,7 @@ const AllThreads = async () => {
             images={thread.images}
             createdAt={thread.createdAt}
             userImage={thread.author.image}
-            username={thread.author.name}
+            username={thread.author.username}
           />
         ))}
     </div>

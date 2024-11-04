@@ -67,11 +67,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     authorized: async ({ auth, request: { nextUrl } }) => {
       const isLoggedIn = !!auth?.user;
-      const protectedRoutes = ["/profile", "/notifications", "/create-thread"];
+      const protectedRoutes = ["/notifications", "/create-thread"];
       const authenticatedRoutes = ["/login", "/registration"];
       const adminRoutes = ["/admin", "/admin/users", "/admin/threads"];
 
-      if (!isLoggedIn && protectedRoutes.includes(nextUrl.pathname)) {
+      const isProfileRoute =
+        !nextUrl.pathname.startsWith("/") &&
+        !protectedRoutes.includes(nextUrl.pathname) &&
+        !authenticatedRoutes.includes(nextUrl.pathname) &&
+        !adminRoutes.includes(nextUrl.pathname);
+
+      if (
+        !isLoggedIn &&
+        (protectedRoutes.includes(nextUrl.pathname) || isProfileRoute)
+      ) {
         return Response.redirect(new URL("/login", nextUrl));
       }
 
@@ -90,6 +99,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return true;
     },
+
     async jwt({ token, user, account }) {
       if (account && account.provider === "google") {
         let userInDb = await prisma.user.findUnique({
@@ -105,7 +115,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           });
         }
 
-        token.username = userInDb.username; // Simpan username di token
+        token.username = userInDb?.username;
       }
       return token;
     },
