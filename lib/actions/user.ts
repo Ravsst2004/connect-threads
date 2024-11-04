@@ -75,3 +75,71 @@ export async function updateUser(values: z.infer<typeof editUserSchema>) {
   revalidatePath("/profile", "page");
   return user;
 }
+
+export async function toggleFollowUser(
+  followingEmail: string,
+  followerEmail: string
+) {
+  const followerUser = await prisma.user.findUnique({
+    where: { email: followerEmail },
+  });
+
+  const followingUser = await prisma.user.findUnique({
+    where: { email: followingEmail },
+  });
+
+  if (!followerUser || !followingUser) {
+    throw new Error("User not found");
+  }
+
+  const existingFollow = await prisma.follow.findUnique({
+    where: {
+      followerId_followingId: {
+        followerId: followerUser.id,
+        followingId: followingUser.id,
+      },
+    },
+  });
+
+  if (existingFollow) {
+    await prisma.follow.delete({
+      where: {
+        followerId_followingId: {
+          followerId: followerUser.id,
+          followingId: followingUser.id,
+        },
+      },
+    });
+
+    await prisma.user.update({
+      where: { id: followingUser.id },
+      data: { totalFollowers: { decrement: 1 } },
+    });
+
+    await prisma.user.update({
+      where: { id: followerUser.id },
+      data: { totalFollowing: { decrement: 1 } },
+    });
+  } else {
+    await prisma.follow.create({
+      data: {
+        followerId: followerUser.id,
+        followingId: followingUser.id,
+      },
+    });
+
+    await prisma.user.update({
+      where: { id: followingUser.id },
+      data: { totalFollowers: { increment: 1 } },
+    });
+
+    await prisma.user.update({
+      where: { id: followerUser.id },
+      data: { totalFollowing: { increment: 1 } },
+    });
+  }
+
+  revalidatePath(`/`, "layout");
+
+  return existingFollow ? true : false;
+}

@@ -4,7 +4,7 @@ import React from "react";
 
 const Login = ({}) => {
   return (
-    <section className="flex flex-col gap-4 border rounded-lg mx-10 md:mx-24 p-4 mt-20">
+    <section className="flex flex-col gap-4 border rounded-lg mx-10 md:mx-24 p-4 mt-10">
       <h1 className="text-3xl font-bold">Login</h1>
       <div className="w-full border-b " />
       <LoginForm />

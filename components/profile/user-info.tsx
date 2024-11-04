@@ -3,7 +3,7 @@ import React from "react";
 import EditDialog from "./edit-dialog";
 import { prisma } from "@/prisma/db";
 import { auth } from "@/auth";
-import { Button } from "../ui/button";
+import FollowButton from "./follow-button";
 
 interface UserInfoProps {
   username: string;
@@ -37,12 +37,15 @@ const UserInfo = async ({ username }: UserInfoProps) => {
         </div>
       </div>
       <p>{user?.bio || "No bio"}</p>
-      <p className="text-gray-500 opacity-75">14 followers</p>
+      <p className="text-gray-500 opacity-75 my-2">14 followers</p>
       {session?.user?.email === user?.email ? (
         <EditDialog />
       ) : (
         <>
-          <Button className="w-full">Follow</Button>
+          <FollowButton
+            userEmail={user?.email as string}
+            sessionEmail={session?.user?.email as string}
+          />
         </>
       )}
     </div>
