@@ -1,6 +1,6 @@
 import { getThreadsWithUser } from "@/lib/actions/threads";
 import React from "react";
-import ThreadsCard from "./threads-card";
+import ThreadsCard from "../threads-card";
 
 const AllThreads = async () => {
   const threads = await getThreadsWithUser();

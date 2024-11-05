@@ -33,6 +33,7 @@ const ThreadsContent = async ({ username }: ThreadsContentProps) => {
             user.threads.map((thread) => (
               <ThreadsCard
                 key={thread.id}
+                threadId={thread.id}
                 content={thread.content}
                 images={thread.images}
                 createdAt={thread.createdAt}

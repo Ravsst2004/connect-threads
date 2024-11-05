@@ -1,7 +1,7 @@
 import { Heart, MessageCircle, Repeat2, Send } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-
+import MoreThreadsCardFeatures from "./threads/more-threads-card-features";
 
 interface ThreadsCardProps {
   images?: string[];
@@ -9,9 +9,11 @@ interface ThreadsCardProps {
   createdAt?: Date;
   userImage: string | null;
   username: string | null;
+  threadId: string;
 }
 
 const ThreadsCard = ({
+  threadId,
   images,
   content,
   createdAt,
@@ -20,7 +22,7 @@ const ThreadsCard = ({
 }: ThreadsCardProps) => {
   const formattedDate = createdAt?.toLocaleDateString("en-US", {
     year: "numeric",
-    month: "long",
+    month: "numeric",
     day: "numeric",
   });
 
@@ -29,7 +31,7 @@ const ThreadsCard = ({
       <div className="w-full border-b border-primary dark:border-white pt-2" />
       <article className="py-4">
         <div>
-          <div>
+          <div className="flex justify-between items-center">
             <div id="user-info" className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center">
                 <Image
@@ -47,7 +49,7 @@ const ThreadsCard = ({
                 <span className="text-gray-500 ">{formattedDate}</span>
               </h1>
             </div>
-            <div></div>
+            <MoreThreadsCardFeatures threadId={threadId} />
           </div>
           <div id="content" className="py-2">
             <p>{content}</p>
