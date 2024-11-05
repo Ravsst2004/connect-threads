@@ -1,9 +1,9 @@
 import Image from "next/image";
 import React from "react";
 import EditDialog from "./edit-dialog";
-import { prisma } from "@/prisma/db";
 import { auth } from "@/auth";
 import FollowButton from "./follow-button";
+import { getUserWithThreads } from "@/lib/actions/user";
 
 interface UserInfoProps {
   username: string;
@@ -11,14 +11,8 @@ interface UserInfoProps {
 
 const UserInfo = async ({ username }: UserInfoProps) => {
   const session = await auth();
-  const user = await prisma.user.findUnique({
-    where: {
-      username: username,
-    },
-    include: {
-      threads: true,
-    },
-  });
+  const user = await getUserWithThreads(username);
+
   return (
     <div>
       <div className="flex justify-between ">
@@ -37,7 +31,9 @@ const UserInfo = async ({ username }: UserInfoProps) => {
         </div>
       </div>
       <p>{user?.bio || "No bio"}</p>
-      <p className="text-gray-500 opacity-75 my-2">14 followers</p>
+      <p className="text-gray-500 opacity-75 my-2">
+        {user.totalFollowers} followers
+      </p>
       {session?.user?.email === user?.email ? (
         <EditDialog />
       ) : (

@@ -27,6 +27,23 @@ export async function getUserByEmail(email: string | undefined) {
   return user;
 }
 
+export async function getUserWithThreads(username: string) {
+  const user = await prisma.user.findUnique({
+    where: {
+      username: username,
+    },
+    include: {
+      threads: true,
+    },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user;
+}
+
 export async function updateUser(values: z.infer<typeof editUserSchema>) {
   const { email, name, username, bio, image } = values;
 
@@ -140,6 +157,34 @@ export async function toggleFollowUser(
   }
 
   revalidatePath(`/`, "layout");
+
+  return existingFollow ? false : true;
+}
+
+export async function isFollowingUser(
+  followingEmail: string,
+  followerEmail: string
+) {
+  const followerUser = await prisma.user.findUnique({
+    where: { email: followerEmail },
+  });
+
+  const followingUser = await prisma.user.findUnique({
+    where: { email: followingEmail },
+  });
+
+  if (!followerUser || !followingUser) {
+    throw new Error("User not found");
+  }
+
+  const existingFollow = await prisma.follow.findUnique({
+    where: {
+      followerId_followingId: {
+        followerId: followerUser.id,
+        followingId: followingUser.id,
+      },
+    },
+  });
 
   return existingFollow ? true : false;
 }

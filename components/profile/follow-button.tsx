@@ -1,7 +1,7 @@
 "use client";
 
-import { toggleFollowUser } from "@/lib/actions/user";
-import React, { useCallback, useState } from "react";
+import { isFollowingUser, toggleFollowUser } from "@/lib/actions/user";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 
 interface FollowButtonProps {
@@ -10,14 +10,26 @@ interface FollowButtonProps {
 }
 
 const FollowButton = ({ userEmail, sessionEmail }: FollowButtonProps) => {
-  const [isFollowing, setIsFollowing] = useState<boolean>();
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleIsFollow = async () => {
+      setIsLoading(true);
+      const result = await isFollowingUser(userEmail, sessionEmail);
+      setIsFollowing(result);
+      setIsLoading(false);
+    };
+    handleIsFollow();
+  }, [userEmail, sessionEmail]);
+
   const handleFollow = useCallback(
     async (event: React.FormEvent) => {
       event.preventDefault();
 
       try {
-        const result = await toggleFollowUser(userEmail, sessionEmail);
-        setIsFollowing(result);
+        const updatedStatus = await toggleFollowUser(userEmail, sessionEmail);
+        setIsFollowing(updatedStatus);
       } catch (error) {
         console.error("Error toggling follow status:", error);
       }
@@ -25,9 +37,19 @@ const FollowButton = ({ userEmail, sessionEmail }: FollowButtonProps) => {
     [userEmail, sessionEmail]
   );
 
+  if (isLoading) {
+    return <Button className="w-full">Loading...</Button>;
+  }
+
   return (
     <form onSubmit={handleFollow}>
-      <Button className="w-full">{isFollowing ? "Unfollow" : "Follow"}</Button>
+      {isFollowing ? (
+        <Button className="w-full" variant="outline">
+          Unfollow
+        </Button>
+      ) : (
+        <Button className="w-full">Follow</Button>
+      )}
     </form>
   );
 };
