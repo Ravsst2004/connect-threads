@@ -13,7 +13,11 @@ const ThreadsContent = async ({ username }: ThreadsContentProps) => {
       username: username,
     },
     include: {
-      threads: true,
+      threads: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
     },
   });
 

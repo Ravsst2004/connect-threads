@@ -11,7 +11,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/prisma/db";
 
 interface MoreThreadsCardFeaturesProps {
-  threadId: string;
+  threadId?: string;
 }
 
 const MoreThreadsCardFeatures = async ({

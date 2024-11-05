@@ -9,7 +9,7 @@ interface ThreadsCardProps {
   createdAt?: Date;
   userImage: string | null;
   username: string | null;
-  threadId: string;
+  threadId?: string;
 }
 
 const ThreadsCard = ({

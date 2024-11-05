@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import { convertFileToBase64 } from "@/lib/actions/convertFileToBase64 ";
-import { createThread } from "@/lib/actions/createThread";
+import { createThread } from "@/lib/actions/threads";
 import { createThreadSchema } from "@/lib/validations/createThreadSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FileImage } from "lucide-react";
@@ -28,35 +28,41 @@ interface CreateThreadFormProps {
 
 const CreateThreadForm = ({ userId }: CreateThreadFormProps) => {
   const [selectedImage, setSelectedImage] = useState<File[] | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const form = useForm<z.infer<typeof createThreadSchema>>({
     resolver: zodResolver(createThreadSchema),
     defaultValues: {
       userId: userId || "",
       content: "",
-      images: "",
+      image: "",
     },
   });
 
   const onSubmit = async (values: z.infer<typeof createThreadSchema>) => {
     // TODO: handle multiple images upload
     if (selectedImage && selectedImage.length > 0) {
-      values.images = await Promise.all(
+      values.image = await Promise.all(
         Array.from(selectedImage).map((file) => convertFileToBase64(file))
       );
     } else {
-      values.images = [];
+      values.image = [];
     }
 
-    const result = await createThread(values);
-
-    if (result) {
-      form.reset();
-      toast({
-        description: "Thread created successfully",
-        title: "Success",
-        variant: "default",
-      });
-      setTimeout(() => [redirect("/")], 1000);
+    try {
+      setIsLoading(true);
+      const result = await createThread(values);
+      setIsLoading(false);
+      if (result) {
+        form.reset();
+        toast({
+          description: "Thread created successfully",
+          title: "Success",
+          variant: "default",
+        });
+        setTimeout(() => [redirect("/")], 1000);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -123,7 +129,7 @@ const CreateThreadForm = ({ userId }: CreateThreadFormProps) => {
           </label>
           <FormField
             control={form.control}
-            name="images"
+            name="image"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -148,8 +154,8 @@ const CreateThreadForm = ({ userId }: CreateThreadFormProps) => {
             )}
           />
 
-          <Button type="submit" className="w-full">
-            Post
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Creating..." : "Create"}
           </Button>
         </form>
       </Form>

@@ -14,10 +14,9 @@ import {
 
 import React, { useState, useCallback } from "react";
 import { deleteThread } from "@/lib/actions/threads";
-import { DropdownMenuItem } from "../ui/dropdown-menu";
-import { Button, buttonVariants } from "../ui/button";
+import { Button } from "../ui/button";
 
-const DeleteButton = ({ threadId }: { threadId: string }) => {
+const DeleteButton = ({ threadId }: { threadId?: string }) => {
   const [loading, setLoading] = useState(false);
 
   const handleDelete = useCallback(
@@ -25,7 +24,7 @@ const DeleteButton = ({ threadId }: { threadId: string }) => {
       event.preventDefault();
       setLoading(true);
       try {
-        await deleteThread(threadId);
+        await deleteThread(threadId as string);
       } catch (error) {
         console.error("Failed to delete thread:", error);
       } finally {
