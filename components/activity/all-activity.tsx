@@ -38,26 +38,29 @@ const AllActivity = async () => {
   });
   console.log("notifications", notifications);
   console.log("senderUsers", senderUsers);
+  console.log(session);
 
   return (
     <div>
-      {notifications && notifications.length > 0 ? (
-        notifications
-          // TODO: fix notifications that appear in 2 accounts or more?
-          .filter((notification) => notification.user.id === session?.user?.id)
-          .map((notification, index) => (
-            <ActivityCard
-              key={index}
-              type={notification.type}
-              content={notification.content}
-              username={notification.sender?.username}
-              userEmail={notification.user.email as string}
-              sessionEmail={session?.user?.email as string}
-            />
-          ))
-      ) : (
-        <h1 className="text-center font-medium text-xl">No Activity</h1>
-      )}
+      <div>
+        {notifications && notifications.length > 0 ? (
+          notifications
+            .filter(
+              (notification) =>
+                notification.user.email === session?.user?.email &&
+                notification.sender.email !== session?.user?.email
+            )
+            .map((notification, index) => (
+              <ActivityCard
+                key={index}
+                content={notification.content}
+                username={notification.sender?.username}
+              />
+            ))
+        ) : (
+          <h1 className="text-center font-medium text-xl">No Activity</h1>
+        )}
+      </div>
     </div>
   );
 };

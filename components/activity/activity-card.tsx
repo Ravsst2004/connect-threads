@@ -2,23 +2,13 @@ import React from "react";
 import HorizontalLine from "../ui/horizontal-line";
 import Image from "next/image";
 import Link from "next/link";
-import FollowButton from "../profile/follow-button";
 
 interface ActivityCardProps {
-  type: string;
   content?: string | null;
   username?: string | null;
-  userEmail?: string;
-  sessionEmail?: string;
 }
 
-const ActivityCard = async ({
-  type,
-  content,
-  username,
-  userEmail,
-  sessionEmail,
-}: ActivityCardProps) => {
+const ActivityCard = async ({ content, username }: ActivityCardProps) => {
   return (
     <div>
       <HorizontalLine />
@@ -46,16 +36,6 @@ const ActivityCard = async ({
                   <span className="text-gray-500 text-xs">3 hours ago</span>
                 </h1>
               </div>
-              {type === "follow" && (
-                // TODO: follow back funtion
-                <div>
-                  {/* <Button>Follow Back</Button> */}
-                  <FollowButton
-                    userEmail={userEmail as string}
-                    sessionEmail={sessionEmail as string}
-                  />
-                </div>
-              )}
             </div>
           </div>
           <div id="content" className="py-2">
