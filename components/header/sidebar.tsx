@@ -24,7 +24,7 @@ const Sidebar = async () => {
         <NavLink href="/" icon={House} />
         <NavLink href="/search" icon={Search} />
         <NavLink href="/create-thread" icon={SquareArrowOutUpRight} />
-        <NavLink href="/notifications" icon={Heart} />
+        <NavLink href="/activities" icon={Heart} />
         <NavLink href={profilePage} icon={User} />
       </ul>
     </nav>

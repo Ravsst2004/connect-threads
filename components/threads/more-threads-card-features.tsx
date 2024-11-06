@@ -18,6 +18,10 @@ const MoreThreadsCardFeatures = async ({
   threadId,
 }: MoreThreadsCardFeaturesProps) => {
   const session = await auth();
+  if (!session) {
+    return null;
+  }
+
   const user = await prisma.user.findUnique({
     where: {
       email: session?.user?.email || undefined,

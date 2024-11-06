@@ -1,6 +1,9 @@
 "use client";
 
-import { isFollowingUser, toggleFollowUser } from "@/lib/actions/user";
+import {
+  isFollowingUser,
+  followUser as toggleFollowUser,
+} from "@/lib/actions/user";
 import React, { useCallback, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 
@@ -26,6 +29,10 @@ const FollowButton = ({ userEmail, sessionEmail }: FollowButtonProps) => {
   const handleFollow = useCallback(
     async (event: React.FormEvent) => {
       event.preventDefault();
+
+      if (!sessionEmail) {
+        return;
+      }
 
       try {
         const updatedStatus = await toggleFollowUser(userEmail, sessionEmail);

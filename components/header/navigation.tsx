@@ -1,13 +1,13 @@
 import {
   House,
   Search,
-  Heart,
   User,
   SquareArrowOutUpRight,
 } from "lucide-react";
 import NavLink from "./nav-link";
 import { getUserByEmail } from "@/lib/actions/user";
 import { auth } from "@/auth";
+import ActivitiesLink from "./activities-link";
 
 const Navigation = async () => {
   const session = await auth();
@@ -23,7 +23,7 @@ const Navigation = async () => {
         <NavLink href="/" icon={House} />
         <NavLink href="/search" icon={Search} />
         <NavLink href="/create-thread" icon={SquareArrowOutUpRight} />
-        <NavLink href="/notifications" icon={Heart} />
+        <ActivitiesLink />
         <NavLink href={profilePage} icon={User} />
       </ul>
     </nav>

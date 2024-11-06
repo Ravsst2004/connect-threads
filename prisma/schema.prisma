@@ -53,8 +53,10 @@ model User {
   Account        Account[]
   Follow         Follow[]
 
-  following Follow[] @relation("Following")
-  followers Follow[] @relation("Followers")
+  following         Follow[]       @relation("Following")
+  followers         Follow[]       @relation("Followers")
+  Notification      Notification[]
+  notificationsSent Notification[] @relation("Sender")
 }
 
 model Thread {
@@ -69,6 +71,19 @@ model Thread {
   likes      Like[]
 
   author User @relation(fields: [authorId], references: [id])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String // User yang menerima notifikasi
+  senderId  String // User yang mengirim notifikasi
+  type      String // Jenis notifikasi, seperti "follow", "like", dll.
+  content   String? // Konten notifikasi (misal: "UserX mulai mengikuti Anda")
+  createdAt DateTime @default(now())
+  isRead    Boolean  @default(false) // Status apakah notifikasi sudah dibaca
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade) // Relasi ke user yang menerima notifikasi
+  sender User @relation("Sender", fields: [senderId], references: [id]) // Relasi ke user yang mengirim notifikasi
 }
 
 model Comment {

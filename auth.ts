@@ -67,7 +67,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     authorized: async ({ auth, request: { nextUrl } }) => {
       const isLoggedIn = !!auth?.user;
-      const protectedRoutes = ["/notifications", "/create-thread"];
+      const protectedRoutes = ["/activities", "/create-thread"];
       const authenticatedRoutes = ["/login", "/registration"];
       const adminRoutes = ["/admin", "/admin/users", "/admin/threads"];
 

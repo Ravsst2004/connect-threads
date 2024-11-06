@@ -2,6 +2,7 @@ import { Heart, MessageCircle, Repeat2, Send } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import MoreThreadsCardFeatures from "./threads/more-threads-card-features";
+import HorizontalLine from "./ui/horizontal-line";
 
 interface ThreadsCardProps {
   images?: string[];
@@ -28,7 +29,7 @@ const ThreadsCard = ({
 
   return (
     <section>
-      <div className="w-full border-b border-primary dark:border-white pt-2" />
+      <HorizontalLine />
       <article className="py-4">
         <div>
           <div className="flex justify-between items-center">

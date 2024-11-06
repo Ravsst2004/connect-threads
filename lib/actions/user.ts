@@ -93,7 +93,7 @@ export async function updateUser(values: z.infer<typeof editUserSchema>) {
   return user;
 }
 
-export async function toggleFollowUser(
+export async function followUser(
   followingEmail: string,
   followerEmail: string
 ) {
@@ -137,6 +137,12 @@ export async function toggleFollowUser(
       where: { id: followerUser.id },
       data: { totalFollowing: { decrement: 1 } },
     });
+
+    await prisma.notification.deleteMany({
+      where: {
+        userId: followingUser.id,
+      },
+    });
   } else {
     await prisma.follow.create({
       data: {
@@ -153,6 +159,15 @@ export async function toggleFollowUser(
     await prisma.user.update({
       where: { id: followerUser.id },
       data: { totalFollowing: { increment: 1 } },
+    });
+
+    await prisma.notification.create({
+      data: {
+        userId: followingUser.id,
+        senderId: followerUser.id,
+        type: "follow",
+        content: `started following you`,
+      },
     });
   }
 

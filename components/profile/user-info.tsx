@@ -1,16 +1,15 @@
 import Image from "next/image";
 import React from "react";
 import EditDialog from "./edit-dialog";
-import { auth } from "@/auth";
 import FollowButton from "./follow-button";
 import { getUserWithThreads } from "@/lib/actions/user";
 
 interface UserInfoProps {
   username: string;
+  email: string;
 }
 
-const UserInfo = async ({ username }: UserInfoProps) => {
-  const session = await auth();
+const UserInfo = async ({ username, email }: UserInfoProps) => {
   const user = await getUserWithThreads(username);
 
   return (
@@ -34,13 +33,13 @@ const UserInfo = async ({ username }: UserInfoProps) => {
       <p className="text-gray-500 opacity-75 my-2">
         {user.totalFollowers} followers
       </p>
-      {session?.user?.email === user?.email ? (
+      {email === user?.email ? (
         <EditDialog />
       ) : (
         <>
           <FollowButton
             userEmail={user?.email as string}
-            sessionEmail={session?.user?.email as string}
+            sessionEmail={email as string}
           />
         </>
       )}
