@@ -29,17 +29,6 @@ const AllActivity = async () => {
     },
   });
 
-  const senderIds = notifications.map((notification) => notification.senderId);
-
-  const senderUsers = await prisma.user.findMany({
-    where: {
-      id: { in: senderIds },
-    },
-  });
-  console.log("notifications", notifications);
-  console.log("senderUsers", senderUsers);
-  console.log(session);
-
   return (
     <div>
       <div>
@@ -55,6 +44,8 @@ const AllActivity = async () => {
                 key={index}
                 content={notification.content}
                 username={notification.sender?.username}
+                createdAt={notification.createdAt}
+                userImage={notification.sender?.image}
               />
             ))
         ) : (

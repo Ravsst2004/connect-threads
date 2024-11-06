@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import ThreadsCard from "../threads-card";
+import ThreadsCard from "../threads/threads-card";
 import { prisma } from "@/prisma/db";
 
 interface ThreadsContentProps {

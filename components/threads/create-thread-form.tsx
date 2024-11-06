@@ -18,7 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FileImage } from "lucide-react";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import { useState } from "react";
+import { MutableRefObject, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -29,6 +29,17 @@ interface CreateThreadFormProps {
 const CreateThreadForm = ({ userId }: CreateThreadFormProps) => {
   const [selectedImage, setSelectedImage] = useState<File[] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(
+    null
+  ) as MutableRefObject<HTMLTextAreaElement | null>;
+
+  const handleInput = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
+
   const form = useForm<z.infer<typeof createThreadSchema>>({
     resolver: zodResolver(createThreadSchema),
     defaultValues: {
@@ -91,15 +102,23 @@ const CreateThreadForm = ({ userId }: CreateThreadFormProps) => {
                 <FormControl>
                   <Textarea
                     placeholder="What's happening?"
-                    className="h-64 border-none rounded-none focus:outline-none focus:ring-0 resize-none"
+                    className="h-auto border-none rounded-none focus:outline-none focus:ring-0 resize-none overflow-hidden"
                     {...field}
+                    ref={(e) => {
+                      field.ref(e);
+                      textareaRef.current = e;
+                    }}
+                    onInput={handleInput}
+                    style={{
+                      height: "auto",
+                      overflow: "hidden",
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-
           {selectedImage && selectedImage.length > 0 && (
             <div className="flex justify-center items-center flex-wrap gap-2">
               {selectedImage.map((image, index) => (

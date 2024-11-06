@@ -1,12 +1,12 @@
 import { getThreadsWithUser } from "@/lib/actions/threads";
 import React from "react";
-import ThreadsCard from "../threads-card";
+import ThreadsCard from "./threads-card";
 
 const AllThreads = async () => {
   const threads = await getThreadsWithUser();
 
   return (
-    <div>
+    <div className="mb-24">
       {threads &&
         threads.length > 0 &&
         threads.map((thread) => (

@@ -51,7 +51,10 @@ export async function updateUser(values: z.infer<typeof editUserSchema>) {
 
   let imageUrl = userDetails.image || "";
 
-  if (userDetails.image) {
+  if (
+    userDetails.image &&
+    !userDetails.image.includes("lh3.googleusercontent.com")
+  ) {
     try {
       const publicId = userDetails.image
         .split("upload/")[1]

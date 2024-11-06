@@ -2,13 +2,25 @@ import React from "react";
 import HorizontalLine from "../ui/horizontal-line";
 import Image from "next/image";
 import Link from "next/link";
+import { formatDistanceToNow } from "date-fns";
 
 interface ActivityCardProps {
   content?: string | null;
   username?: string | null;
+  createdAt?: Date | null;
+  userImage: string | null;
 }
 
-const ActivityCard = async ({ content, username }: ActivityCardProps) => {
+const ActivityCard = async ({
+  content,
+  username,
+  createdAt,
+  userImage,
+}: ActivityCardProps) => {
+  const formattedDate = createdAt
+    ? formatDistanceToNow(new Date(createdAt), { addSuffix: true })
+    : "";
+
   return (
     <div>
       <HorizontalLine />
@@ -22,7 +34,7 @@ const ActivityCard = async ({ content, username }: ActivityCardProps) => {
               <div className="flex justify-center gap-2">
                 <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center">
                   <Image
-                    src={"/images/user-profile.png"}
+                    src={userImage || "/images/user-profile.png"}
                     alt="profile"
                     width={80}
                     height={80}
@@ -33,7 +45,7 @@ const ActivityCard = async ({ content, username }: ActivityCardProps) => {
                   <Link href={`/@${username}`} className="font-semibold">
                     {username}
                   </Link>{" "}
-                  <span className="text-gray-500 text-xs">3 hours ago</span>
+                  <span className="text-gray-500 text-xs">{formattedDate}</span>
                 </h1>
               </div>
             </div>
@@ -48,38 +60,3 @@ const ActivityCard = async ({ content, username }: ActivityCardProps) => {
 };
 
 export default ActivityCard;
-
-{
-  /* <div>
-  <HorizontalLine />
-  <article className="py-4">
-    <div>
-      <div className="flex gap-2 items-center">
-        <div className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center">
-          <Image
-            src={"/images/user-profile.png"}
-            alt="profile"
-            width={80}
-            height={80}
-            className="object-cover w-full h-full"
-          />
-        </div>
-        <div id="user-info" className="flex flex-col items-start">
-          <h1 className="flex items-center gap-4">
-            <Link href={`/@username`} className="font-semibold">
-              Username
-            </Link>{" "}
-            <span className="text-gray-500 text-xs">3 hours ago</span>
-          </h1>
-          <div id="content">
-            <p>Follow you</p>
-          </div>
-        </div>
-        <div>
-          <Button>Action</Button>
-        </div>
-      </div>
-    </div>
-  </article>
-</div>; */
-}

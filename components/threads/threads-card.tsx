@@ -1,8 +1,9 @@
 import { Heart, MessageCircle, Repeat2, Send } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import MoreThreadsCardFeatures from "./threads/more-threads-card-features";
-import HorizontalLine from "./ui/horizontal-line";
+import MoreThreadsCardFeatures from "./more-threads-card-features";
+import HorizontalLine from "../ui/horizontal-line";
+import { formatDistanceToNow } from "date-fns";
 
 interface ThreadsCardProps {
   images?: string[];
@@ -21,11 +22,9 @@ const ThreadsCard = ({
   userImage,
   username,
 }: ThreadsCardProps) => {
-  const formattedDate = createdAt?.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-  });
+  const formattedDate = createdAt
+    ? formatDistanceToNow(new Date(createdAt), { addSuffix: true })
+    : "";
 
   return (
     <section>
@@ -43,17 +42,17 @@ const ThreadsCard = ({
                   className="object-cover w-full h-full"
                 />
               </div>
-              <h1 className="flex items-center gap-4">
+              <h1 className="flex items-center gap-2">
                 <Link href={`/@${username}`} className="font-semibold">
                   {username}
                 </Link>{" "}
-                <span className="text-gray-500 ">{formattedDate}</span>
+                <span className="text-gray-500 text-xs">{formattedDate}</span>
               </h1>
             </div>
             <MoreThreadsCardFeatures threadId={threadId} />
           </div>
           <div id="content" className="py-2">
-            <p>{content}</p>
+            <p className="">{content}</p>
             {images && images.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">
                 {images.map((image, index) => (

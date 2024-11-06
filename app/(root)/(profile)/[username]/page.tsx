@@ -38,12 +38,14 @@ const Profile = async ({ params }: ProfileProps) => {
   }
 
   return (
-    <section>
-      <UserInfo username={username} email={session?.user.email as string} />
-      <div className="mt-4">
-        <ThreadsContent username={username} />
-      </div>
-    </section>
+    <>
+      <section>
+        <UserInfo username={username} email={session?.user.email as string} />
+        <div className="mt-4">
+          <ThreadsContent username={username} />
+        </div>
+      </section>
+    </>
   );
 };
 
