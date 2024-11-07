@@ -12,6 +12,8 @@ const AllThreads = async () => {
         threads.map((thread) => (
           <ThreadsCard
             key={thread.id}
+            threadId={thread.id}
+            userId={thread.author.id}
             content={thread.content}
             images={thread.images}
             createdAt={thread.createdAt}

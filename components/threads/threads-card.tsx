@@ -1,9 +1,12 @@
-import { Heart, MessageCircle, Repeat2, Send } from "lucide-react";
+import { CiChat1 } from "react-icons/ci";
+import { IoIosRepeat } from "react-icons/io";
+import { IoIosSend } from "react-icons/io";
 import Image from "next/image";
 import Link from "next/link";
 import MoreThreadsCardFeatures from "./more-threads-card-features";
 import HorizontalLine from "../ui/horizontal-line";
 import { formatDistanceToNow } from "date-fns";
+import LikeButton from "./like-button";
 
 interface ThreadsCardProps {
   images?: string[];
@@ -11,11 +14,13 @@ interface ThreadsCardProps {
   createdAt?: Date;
   userImage: string | null;
   username: string | null;
-  threadId?: string;
+  threadId: string;
+  userId: string;
 }
 
 const ThreadsCard = ({
   threadId,
+  userId,
   images,
   content,
   createdAt,
@@ -69,11 +74,11 @@ const ThreadsCard = ({
             )}
           </div>
         </div>
-        <div className="flex items-start justify-start mt-2 gap-3">
-          <Heart />
-          <MessageCircle />
-          <Repeat2 />
-          <Send />
+        <div className="flex items-start justify-start mt-2 gap-x-3">
+          <LikeButton threadId={threadId as string} userId={userId} />
+          <CiChat1 className="h-7 w-7" />
+          <IoIosRepeat className="h-7 w-7" />
+          <IoIosSend className="h-7 w-7" />
         </div>
       </article>
     </section>

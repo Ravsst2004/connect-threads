@@ -47,6 +47,7 @@ model User {
   updatedAt      DateTime  @updatedAt
   totalFollowers Int       @default(0) @map("total_followers")
   totalFollowing Int       @default(0) @map("total_following")
+  totalLikes     Int       @default(0) @map("total_likes")
   threads        Thread[]
   comments       Comment[]
   likes          Like[]
@@ -75,15 +76,15 @@ model Thread {
 
 model Notification {
   id        String   @id @default(cuid())
-  userId    String // User yang menerima notifikasi
-  senderId  String // User yang mengirim notifikasi
-  type      String // Jenis notifikasi, seperti "follow", "like", dll.
-  content   String? // Konten notifikasi (misal: "UserX mulai mengikuti Anda")
+  userId    String
+  senderId  String
+  type      String
+  content   String?
   createdAt DateTime @default(now())
-  isRead    Boolean  @default(false) // Status apakah notifikasi sudah dibaca
+  isRead    Boolean  @default(false)
 
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade) // Relasi ke user yang menerima notifikasi
-  sender User @relation("Sender", fields: [senderId], references: [id]) // Relasi ke user yang mengirim notifikasi
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sender User @relation("Sender", fields: [senderId], references: [id])
 }
 
 model Comment {

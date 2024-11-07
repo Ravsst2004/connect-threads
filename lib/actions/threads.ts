@@ -92,3 +92,71 @@ export async function getThreadsWithUser() {
     },
   });
 }
+
+export async function likeThread(userId: string, threadId: string) {
+  const existingLike = await prisma.like.findUnique({
+    where: {
+      userId_threadId: {
+        userId,
+        threadId,
+      },
+    },
+  });
+
+  if (existingLike) {
+    await prisma.like.delete({
+      where: {
+        userId_threadId: {
+          userId,
+          threadId,
+        },
+      },
+    });
+
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        totalLikes: {
+          decrement: 1,
+        },
+      },
+    });
+  } else {
+    await prisma.like.create({
+      data: {
+        userId,
+        threadId,
+      },
+    });
+
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        totalLikes: {
+          increment: 1,
+        },
+      },
+    });
+  }
+
+  revalidatePath(`/`, "layout");
+
+  return existingLike ? false : true;
+}
+
+export async function isLikedThread(userId: string, threadId: string) {
+  const existingLike = await prisma.like.findUnique({
+    where: {
+      userId_threadId: {
+        userId,
+        threadId,
+      },
+    },
+  });
+
+  return existingLike ? true : false;
+}
