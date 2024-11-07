@@ -69,7 +69,7 @@ const ThreadsCard = ({
             )}
           </div>
         </div>
-        <div className="flex items-start justify-start mt-2 gap-2">
+        <div className="flex items-start justify-start mt-2 gap-3">
           <Heart />
           <MessageCircle />
           <Repeat2 />

@@ -18,6 +18,10 @@ const FollowButton = ({ userEmail, sessionEmail }: FollowButtonProps) => {
 
   useEffect(() => {
     const handleIsFollow = async () => {
+      if (!sessionEmail) {
+        return;
+      }
+
       setIsLoading(true);
       const result = await isFollowingUser(userEmail, sessionEmail);
       setIsFollowing(result);
@@ -50,13 +54,15 @@ const FollowButton = ({ userEmail, sessionEmail }: FollowButtonProps) => {
 
   return (
     <form onSubmit={handleFollow}>
-      {isFollowing ? (
-        <Button className="w-full" variant="outline">
-          Unfollow
-        </Button>
-      ) : (
-        <Button className="w-full">Follow</Button>
-      )}
+      {sessionEmail ? (
+        isFollowing ? (
+          <Button className="w-full" variant="outline">
+            Unfollow
+          </Button>
+        ) : (
+          <Button className="w-full">Follow</Button>
+        )
+      ) : null}
     </form>
   );
 };
