@@ -60,8 +60,9 @@ const LikeButton = ({ threadId, userId, senderEmail }: LikeButtonProps) => {
           <p>{totalLikes}</p>
         </button>
       ) : (
-        <button type="submit">
+        <button type="submit" className="flex items-center gap-1">
           <IoIosHeartEmpty className="h-7 w-7" />
+          {totalLikes > 0 && <p>{totalLikes}</p>}
         </button>
       )}
     </form>

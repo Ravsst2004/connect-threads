@@ -29,7 +29,6 @@ const AllActivity = async () => {
     },
   });
 
-
   return (
     <div>
       <div>
@@ -38,7 +37,8 @@ const AllActivity = async () => {
             .filter(
               (notification) =>
                 notification.user.email === session?.user?.email &&
-                notification.sender.email !== session?.user?.email
+                notification.sender.email !== session?.user?.email &&
+                notification.type !== "like"
             )
             .map((notification, index) => (
               <ActivityCard
