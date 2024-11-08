@@ -1,36 +1,29 @@
-import { IoIosHeartEmpty, IoIosRepeat } from "react-icons/io";
-import { IoIosSend } from "react-icons/io";
 import Image from "next/image";
 import Link from "next/link";
-import MoreThreadsCardFeatures from "./more-threads-card-features";
-import HorizontalLine from "../ui/horizontal-line";
 import { formatDistanceToNow } from "date-fns";
-import LikeButton from "./like-button";
-import CommentButton from "./comment-button";
+import HorizontalLine from "../ui/horizontal-line";
+import MoreThreadsCardFeatures from "./more-threads-card-features";
 
-interface ThreadsCardProps {
-  images?: string[];
+interface ListCommentProps {
+  id: string;
   content: string;
-  createdAt?: Date;
-  userImage: string | null;
-  username: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  images: string[];
   threadId: string;
   userId: string;
-  senderEmail?: string | null;
-  userCommentId: string | null | undefined;
+  username?: string;
+  userImage: string | null;
 }
 
-const ThreadsCard = ({
-  threadId,
-  userId,
-  images,
+const ListComment = ({
   content,
   createdAt,
-  userImage,
+  images,
   username,
-  senderEmail,
-  userCommentId,
-}: ThreadsCardProps) => {
+  userImage,
+  threadId,
+}: ListCommentProps) => {
   const formattedDate = createdAt
     ? formatDistanceToNow(new Date(createdAt), { addSuffix: true })
     : "";
@@ -60,8 +53,8 @@ const ThreadsCard = ({
             </div>
             <MoreThreadsCardFeatures threadId={threadId} />
           </div>
-          <Link href={`/@${username}/post/${threadId}`} id="content" className="py-2">
-            <p className="">{content}</p>
+          <div id="content" className="pt-2">
+            <p>{content}</p>
             {images && images.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">
                 {images.map((image, index) => (
@@ -76,32 +69,11 @@ const ThreadsCard = ({
                 ))}
               </div>
             )}
-          </Link>
-        </div>
-        <div className="flex items-start justify-start mt-2 gap-x-3">
-          {senderEmail ? (
-            <LikeButton
-              threadId={threadId as string}
-              userId={userId}
-              senderEmail={senderEmail as string}
-            />
-          ) : (
-            <Link href="/login">
-              <button>
-                <IoIosHeartEmpty className="h-7 w-7" />
-              </button>
-            </Link>
-          )}
-          <CommentButton
-            userId={userCommentId as string}
-            threadId={threadId as string}
-          />
-          <IoIosRepeat className="h-7 w-7" />
-          <IoIosSend className="h-7 w-7" />
+          </div>
         </div>
       </article>
     </section>
   );
 };
 
-export default ThreadsCard;
+export default ListComment;

@@ -60,15 +60,16 @@ model User {
 }
 
 model Thread {
-  id         String    @id @default(cuid())
-  authorId   String
-  content    String    @db.Text
-  totalLikes Int       @default(0) @map("total_likes")
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  images     String[]
-  comments   Comment[]
-  likes      Like[]
+  id            String    @id @default(cuid())
+  authorId      String
+  content       String    @db.Text
+  totalLikes    Int       @default(0) @map("total_likes")
+  totalComments Int       @default(0) @map("total_comments")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  images        String[]
+  comments      Comment[]
+  likes         Like[]
 
   author User @relation(fields: [authorId], references: [id])
 }
@@ -91,11 +92,12 @@ model Comment {
   userId    String   @map("user_id")
   threadId  String   @map("thread_id")
   content   String
+  images    String[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   user   User   @relation(fields: [userId], references: [id])
-  thread Thread @relation(fields: [threadId], references: [id])
+  thread Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
 }
 
 model Follow {

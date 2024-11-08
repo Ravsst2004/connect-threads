@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { createThreadSchema } from "../validations/createThreadSchema";
 import cloudinary from "../config/cloudinary";
+import { createCommentThreadSchema } from "../validations/createCommentThreadSchema";
 
 export async function createThread(values: z.infer<typeof createThreadSchema>) {
   const { userId, content, image: images } = values;
@@ -123,7 +124,6 @@ export async function likeThread(
   });
 
   if (existingLike) {
-    // Unlike the thread
     await prisma.like.delete({
       where: {
         userId_threadId: {
@@ -146,7 +146,6 @@ export async function likeThread(
       where: { userId: userId, senderId: sender.id },
     });
   } else {
-    // Like the thread
     await prisma.like.create({
       data: { userId: sender.id, threadId },
     });
@@ -191,4 +190,62 @@ export async function isLikedThread(senderEmail: string, threadId: string) {
     },
   });
   return !!existingLike;
+}
+
+export async function createComment(
+  values: z.infer<typeof createCommentThreadSchema>
+) {
+  const { userId, threadId, content, image: images } = values;
+
+  let imageUrls = [];
+
+  if (images && images.length > 0) {
+    try {
+      const uploadPromises = images.map((image: string) =>
+        cloudinary.uploader.upload(image, {
+          folder: "connect-threads",
+        })
+      );
+
+      const uploadResponses = await Promise.all(uploadPromises);
+
+      imageUrls = uploadResponses.map((response) => response.secure_url);
+    } catch (error) {
+      console.error("Error uploading images to Cloudinary:", error);
+      throw new Error("Failed to upload images");
+    }
+  }
+
+  try {
+    const thread = await prisma.comment.create({
+      data: {
+        userId,
+        threadId,
+        content,
+        images: imageUrls,
+      },
+    });
+
+    await prisma.thread.update({
+      where: { id: threadId },
+      data: {
+        totalComments: {
+          increment: 1,
+        },
+      },
+    });
+    return thread;
+  } catch (error) {
+    console.error("Error creating thread:", error);
+    throw new Error("Failed to create thread");
+  }
+}
+
+export async function getTotalThreadComments(threadId: string) {
+  const thread = await prisma.thread.findUnique({
+    where: { id: threadId },
+    select: { totalComments: true },
+  });
+
+  return thread?.totalComments || 0;
 }

@@ -1,40 +1,10 @@
-import { IoIosHeartEmpty, IoIosRepeat } from "react-icons/io";
-import { IoIosSend } from "react-icons/io";
-import Image from "next/image";
-import Link from "next/link";
-import MoreThreadsCardFeatures from "./more-threads-card-features";
-import HorizontalLine from "../ui/horizontal-line";
-import { formatDistanceToNow } from "date-fns";
+import React from "react";
 import LikeButton from "./like-button";
+import { Link } from "lucide-react";
+import { IoIosHeartEmpty, IoIosRepeat, IoIosSend } from "react-icons/io";
 import CommentButton from "./comment-button";
 
-interface ThreadsCardProps {
-  images?: string[];
-  content: string;
-  createdAt?: Date;
-  userImage: string | null;
-  username: string | null;
-  threadId: string;
-  userId: string;
-  senderEmail?: string | null;
-  userCommentId: string | null | undefined;
-}
-
-const ThreadsCard = ({
-  threadId,
-  userId,
-  images,
-  content,
-  createdAt,
-  userImage,
-  username,
-  senderEmail,
-  userCommentId,
-}: ThreadsCardProps) => {
-  const formattedDate = createdAt
-    ? formatDistanceToNow(new Date(createdAt), { addSuffix: true })
-    : "";
-
+const DetailCardThread = () => {
   return (
     <section>
       <HorizontalLine />
@@ -60,7 +30,11 @@ const ThreadsCard = ({
             </div>
             <MoreThreadsCardFeatures threadId={threadId} />
           </div>
-          <Link href={`/@${username}/post/${threadId}`} id="content" className="py-2">
+          <Link
+            href={`/@${username}/post/${threadId}`}
+            id="content"
+            className="py-2"
+          >
             <p className="">{content}</p>
             {images && images.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">
@@ -104,4 +78,4 @@ const ThreadsCard = ({
   );
 };
 
-export default ThreadsCard;
+export default DetailCardThread;
