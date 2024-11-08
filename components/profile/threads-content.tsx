@@ -1,38 +1,49 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import ThreadsCard from "../threads-card";
+import ThreadsCard from "../threads/threads-card";
 import { prisma } from "@/prisma/db";
+import { auth } from "@/auth";
 
 interface ThreadsContentProps {
   username: string;
 }
 
 const ThreadsContent = async ({ username }: ThreadsContentProps) => {
+  const session = await auth();
   const user = await prisma.user.findUnique({
     where: {
       username: username,
     },
     include: {
-      threads: true,
+      threads: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
     },
   });
 
   return (
     <div>
       <Tabs defaultValue="threads">
-        <TabsList className="w-full">
-          <TabsTrigger value="threads" className="w-full ">
-            Threads
-          </TabsTrigger>
-          <TabsTrigger value="reply" className="w-full">
-            Reply
-          </TabsTrigger>
-        </TabsList>
+        {username === session?.user?.username && (
+          <TabsList className="w-full">
+            <>
+              <TabsTrigger value="threads" className="w-full ">
+                Threads
+              </TabsTrigger>
+              <TabsTrigger value="reply" className="w-full">
+                Reply
+              </TabsTrigger>
+            </>
+          </TabsList>
+        )}
         <TabsContent value="threads">
           {user?.threads && user.threads.length > 0 ? (
             user.threads.map((thread) => (
               <ThreadsCard
                 key={thread.id}
+                threadId={thread.id}
                 content={thread.content}
                 images={thread.images}
                 createdAt={thread.createdAt}

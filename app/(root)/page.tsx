@@ -1,8 +1,8 @@
-import AllThreads from "@/components/all-threads";
+import AllThreads from "@/components/threads/all-threads";
 
 const Home = () => {
   return (
-    <section className="px-2">
+    <section>
       <AllThreads />
     </section>
   );

@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import CreateThreadForm from "@/components/create-thread-form";
+import CreateThreadForm from "@/components/threads/create-thread-form";
 import { prisma } from "@/prisma/db";
 
 const CreateThread = async () => {

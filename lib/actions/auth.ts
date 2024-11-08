@@ -74,8 +74,6 @@ export async function login(
   const { email, password } = values;
 
   try {
-    // NOTE: This is a workaround for a bug in the next-auth library
-
     const result = await signIn("credentials", {
       email,
       password,

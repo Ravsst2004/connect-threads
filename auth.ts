@@ -67,7 +67,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     authorized: async ({ auth, request: { nextUrl } }) => {
       const isLoggedIn = !!auth?.user;
-      const protectedRoutes = ["/notifications", "/create-thread"];
+      const protectedRoutes = ["/activities", "/create-thread"];
       const authenticatedRoutes = ["/login", "/registration"];
       const adminRoutes = ["/admin", "/admin/users", "/admin/threads"];
 
@@ -106,7 +106,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           where: { email: user.email },
         });
 
-        // Jika user belum memiliki username, generate dan simpan di database
         if (userInDb && !userInDb.username) {
           const generatedUsername = await generateUniqueUsername(user.name);
           userInDb = await prisma.user.update({
@@ -122,6 +121,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ session, token }) {
       if (token) {
         session.user.role = token.role;
+        session.user.username = token.username;
       }
       return session;
     },
