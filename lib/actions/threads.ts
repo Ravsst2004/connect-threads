@@ -93,70 +93,102 @@ export async function getThreadsWithUser() {
   });
 }
 
-export async function likeThread(userId: string, threadId: string) {
+export async function getTotalThreadLikes(threadId: string) {
+  const thread = await prisma.thread.findUnique({
+    where: { id: threadId },
+    select: { totalLikes: true },
+  });
+
+  return thread?.totalLikes || 0;
+}
+
+export async function likeThread(
+  userId: string, // Thread owner
+  threadId: string,
+  senderEmail: string // Login user
+) {
+  const sender = await prisma.user.findUnique({
+    where: { email: senderEmail },
+  });
+
+  if (!sender) return false;
+
   const existingLike = await prisma.like.findUnique({
     where: {
       userId_threadId: {
-        userId,
+        userId: sender.id, // sender.id as the liker ID
         threadId,
       },
     },
   });
 
   if (existingLike) {
+    // Unlike the thread
     await prisma.like.delete({
       where: {
         userId_threadId: {
-          userId,
+          userId: sender.id,
           threadId,
         },
       },
     });
 
-    await prisma.user.update({
-      where: {
-        id: userId,
-      },
+    await prisma.thread.update({
+      where: { id: threadId },
       data: {
         totalLikes: {
           decrement: 1,
         },
       },
     });
+
+    await prisma.notification.deleteMany({
+      where: { userId: userId, senderId: sender.id },
+    });
   } else {
+    // Like the thread
     await prisma.like.create({
-      data: {
-        userId,
-        threadId,
-      },
+      data: { userId: sender.id, threadId },
     });
 
-    await prisma.user.update({
-      where: {
-        id: userId,
-      },
+    await prisma.thread.update({
+      where: { id: threadId },
       data: {
         totalLikes: {
           increment: 1,
         },
       },
     });
+
+    if (sender.id !== userId) {
+      await prisma.notification.create({
+        data: {
+          userId,
+          senderId: sender.id,
+          type: "like",
+          content: `liked your thread`,
+        },
+      });
+    }
   }
 
   revalidatePath(`/`, "layout");
 
-  return existingLike ? false : true;
+  return !existingLike;
 }
 
-export async function isLikedThread(userId: string, threadId: string) {
+export async function isLikedThread(senderEmail: string, threadId: string) {
+  const user = await prisma.user.findUnique({
+    where: { email: senderEmail },
+  });
+
   const existingLike = await prisma.like.findUnique({
     where: {
       userId_threadId: {
-        userId,
+        userId: user?.id as string,
         threadId,
       },
     },
   });
-
-  return existingLike ? true : false;
+  return !!existingLike;
 }

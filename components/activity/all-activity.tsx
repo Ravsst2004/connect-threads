@@ -29,6 +29,7 @@ const AllActivity = async () => {
     },
   });
 
+
   return (
     <div>
       <div>

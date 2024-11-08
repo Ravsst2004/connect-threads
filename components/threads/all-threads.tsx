@@ -1,8 +1,10 @@
 import { getThreadsWithUser } from "@/lib/actions/threads";
 import React from "react";
 import ThreadsCard from "./threads-card";
+import { auth } from "@/auth";
 
 const AllThreads = async () => {
+  const session = await auth();
   const threads = await getThreadsWithUser();
 
   return (
@@ -19,6 +21,7 @@ const AllThreads = async () => {
             createdAt={thread.createdAt}
             userImage={thread.author.image}
             username={thread.author.username}
+            senderEmail={session?.user?.email}
           />
         ))}
     </div>

@@ -47,7 +47,6 @@ model User {
   updatedAt      DateTime  @updatedAt
   totalFollowers Int       @default(0) @map("total_followers")
   totalFollowing Int       @default(0) @map("total_following")
-  totalLikes     Int       @default(0) @map("total_likes")
   threads        Thread[]
   comments       Comment[]
   likes          Like[]

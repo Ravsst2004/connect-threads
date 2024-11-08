@@ -1,5 +1,5 @@
 import { CiChat1 } from "react-icons/ci";
-import { IoIosRepeat } from "react-icons/io";
+import { IoIosHeartEmpty, IoIosRepeat } from "react-icons/io";
 import { IoIosSend } from "react-icons/io";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,6 +16,7 @@ interface ThreadsCardProps {
   username: string | null;
   threadId: string;
   userId: string;
+  senderEmail?: string | null;
 }
 
 const ThreadsCard = ({
@@ -26,6 +27,7 @@ const ThreadsCard = ({
   createdAt,
   userImage,
   username,
+  senderEmail,
 }: ThreadsCardProps) => {
   const formattedDate = createdAt
     ? formatDistanceToNow(new Date(createdAt), { addSuffix: true })
@@ -75,7 +77,20 @@ const ThreadsCard = ({
           </div>
         </div>
         <div className="flex items-start justify-start mt-2 gap-x-3">
-          <LikeButton threadId={threadId as string} userId={userId} />
+          {senderEmail ? (
+            <LikeButton
+              threadId={threadId as string}
+              userId={userId}
+              senderEmail={senderEmail as string}
+            />
+          ) : (
+            <Link href="/login">
+              <button>
+                <IoIosHeartEmpty className="h-7 w-7" />
+              </button>
+            </Link>
+          )}
+
           <CiChat1 className="h-7 w-7" />
           <IoIosRepeat className="h-7 w-7" />
           <IoIosSend className="h-7 w-7" />
