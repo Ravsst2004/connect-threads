@@ -247,6 +247,7 @@ export async function createComment(
       data: {
         userId: retrieve.id,
         senderId: userId,
+        threadId,
         type: "comment",
         content: content,
       },

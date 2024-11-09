@@ -23,6 +23,11 @@ const ThreadsContent = async ({ username }: ThreadsContentProps) => {
       },
     },
   });
+  const commentUser = await prisma.user.findUnique({
+    where: {
+      email: session?.user?.email as string,
+    },
+  });
 
   console.log(user);
 
@@ -46,12 +51,15 @@ const ThreadsContent = async ({ username }: ThreadsContentProps) => {
             user.threads.map((thread) => (
               <ThreadsCard
                 key={thread.id}
-                threadId={thread.id}
-                content={thread.content}
-                images={thread.images}
-                createdAt={thread.createdAt}
-                userImage={user.image}
                 username={user.username}
+                threadId={thread.id}
+                userId={user.id}
+                images={thread.images}
+                userImage={user.image}
+                content={thread.content}
+                userCommentId={commentUser?.id}
+                senderEmail={session?.user?.email as string}
+                createdAt={thread.createdAt}
               />
             ))
           ) : (

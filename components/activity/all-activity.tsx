@@ -23,6 +23,7 @@ const AllActivity = async () => {
     include: {
       user: true,
       sender: true,
+      thread: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -49,6 +50,7 @@ const AllActivity = async () => {
                   key={index}
                   type={notification.type}
                   content={notification.content}
+                  threadId={notification.thread?.id}
                   username={notification.sender?.username}
                   createdAt={notification.createdAt}
                   userImage={notification.sender?.image}
