@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ThreadsCard from "../threads/threads-card";
 import { prisma } from "@/prisma/db";
 import { auth } from "@/auth";
+import ReplyList from "../threads/reply-list";
 
 interface ThreadsContentProps {
   username: string;
@@ -55,7 +56,14 @@ const ThreadsContent = async ({ username }: ThreadsContentProps) => {
             <div>No Threads</div>
           )}
         </TabsContent>
-        <TabsContent value="reply">Your reply here.</TabsContent>
+        <TabsContent value="reply">
+          {user?.threads && user.threads.length > 0 ? (
+            <ReplyList />
+          ) : (
+            <div>No Threads</div>
+          )}
+          {/* <ReplyList /> */}
+        </TabsContent>
       </Tabs>
     </div>
   );

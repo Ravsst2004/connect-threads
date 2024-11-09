@@ -15,9 +15,9 @@ interface ThreadsCardProps {
   userImage: string | null;
   username: string | null;
   threadId: string;
-  userId: string;
+  userId?: string;
   senderEmail?: string | null;
-  userCommentId: string | null | undefined;
+  userCommentId?: string | null | undefined;
 }
 
 const ThreadsCard = ({
@@ -60,8 +60,12 @@ const ThreadsCard = ({
             </div>
             <MoreThreadsCardFeatures threadId={threadId} />
           </div>
-          <Link href={`/@${username}/post/${threadId}`} id="content" className="py-2">
-            <p className="">{content}</p>
+          <Link
+            href={`/@${username}/post/${threadId}`}
+            id="content"
+            className="py-2"
+          >
+            <p className="pt-2">{content}</p>
             {images && images.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">
                 {images.map((image, index) => (
@@ -82,7 +86,7 @@ const ThreadsCard = ({
           {senderEmail ? (
             <LikeButton
               threadId={threadId as string}
-              userId={userId}
+              userId={userId as string}
               senderEmail={senderEmail as string}
             />
           ) : (
