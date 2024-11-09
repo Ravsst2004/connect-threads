@@ -8,7 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { MutableRefObject, useRef, useState } from "react";
 import { createComment } from "@/lib/actions/threads";
 import { toast } from "@/hooks/use-toast";
-import { redirect } from "next/navigation";
 import {
   Form,
   FormControl,
@@ -25,9 +24,10 @@ import { Button, buttonVariants } from "../ui/button";
 interface CommentFormProps {
   userId: string;
   threadId: string;
+  retrieveId: string;
 }
 
-const CommentForm = ({ userId, threadId }: CommentFormProps) => {
+const CommentForm = ({ userId, threadId, retrieveId }: CommentFormProps) => {
   const [selectedImage, setSelectedImage] = useState<File[] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(
@@ -46,6 +46,7 @@ const CommentForm = ({ userId, threadId }: CommentFormProps) => {
     defaultValues: {
       userId: userId || "",
       threadId: threadId || "",
+      retrieveId: retrieveId || "",
       content: "",
       image: "",
     },
@@ -73,7 +74,6 @@ const CommentForm = ({ userId, threadId }: CommentFormProps) => {
           title: "Success",
           variant: "default",
         });
-        setTimeout(() => [redirect("/")], 1000);
       }
     } catch (error) {
       console.log(error);
@@ -99,6 +99,18 @@ const CommentForm = ({ userId, threadId }: CommentFormProps) => {
           <FormField
             control={form.control}
             name="threadId"
+            render={({ field }) => (
+              <FormItem hidden>
+                <FormControl>
+                  <Input type="text" className="hidden" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="retrieveId"
             render={({ field }) => (
               <FormItem hidden>
                 <FormControl>

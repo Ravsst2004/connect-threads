@@ -195,7 +195,15 @@ export async function isLikedThread(senderEmail: string, threadId: string) {
 export async function createComment(
   values: z.infer<typeof createCommentThreadSchema>
 ) {
-  const { userId, threadId, content, image: images } = values;
+  const { userId, threadId, content, retrieveId, image: images } = values;
+
+  const retrieve = await prisma.user.findUnique({
+    where: { id: retrieveId },
+  });
+
+  console.log(retrieve);
+
+  if (!retrieve) return false;
 
   let imageUrls = [];
 
@@ -234,6 +242,18 @@ export async function createComment(
         },
       },
     });
+
+    await prisma.notification.create({
+      data: {
+        userId: retrieve.id,
+        senderId: userId,
+        type: "comment",
+        content: content,
+      },
+    });
+
+    revalidatePath(`/`, "layout");
+
     return thread;
   } catch (error) {
     console.error("Error creating thread:", error);

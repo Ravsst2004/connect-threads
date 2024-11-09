@@ -29,6 +29,8 @@ const AllActivity = async () => {
     },
   });
 
+  // console.log(notifications);
+
   return (
     <div>
       <div>
@@ -37,18 +39,22 @@ const AllActivity = async () => {
             .filter(
               (notification) =>
                 notification.user.email === session?.user?.email &&
-                notification.sender.email !== session?.user?.email &&
-                notification.type !== "like"
+                notification.sender.email !== session?.user?.email
             )
-            .map((notification, index) => (
-              <ActivityCard
-                key={index}
-                content={notification.content}
-                username={notification.sender?.username}
-                createdAt={notification.createdAt}
-                userImage={notification.sender?.image}
-              />
-            ))
+            .map((notification, index) => {
+              console.log(notification);
+
+              return (
+                <ActivityCard
+                  key={index}
+                  type={notification.type}
+                  content={notification.content}
+                  username={notification.sender?.username}
+                  createdAt={notification.createdAt}
+                  userImage={notification.sender?.image}
+                />
+              );
+            })
         ) : (
           <h1 className="text-center font-medium text-xl">No Activity</h1>
         )}

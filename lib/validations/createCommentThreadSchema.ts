@@ -11,6 +11,7 @@ const ACCEPTED_IMAGE_MIME_TYPES = [
 export const createCommentThreadSchema = object({
   userId: string(),
   threadId: string(),
+  retrieveId: string(),
   content: string()
     .min(1, "Content at least 1 character")
     .max(1024, "Content is too long (max 1024 characters)."),

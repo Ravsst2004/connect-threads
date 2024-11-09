@@ -14,9 +14,14 @@ import { getTotalThreadComments } from "@/lib/actions/threads";
 interface CommentButtonProps {
   userId: string;
   threadId: string;
+  retrieveId: string;
 }
 
-const CommentButton = ({ userId, threadId }: CommentButtonProps) => {
+const CommentButton = ({
+  userId,
+  threadId,
+  retrieveId,
+}: CommentButtonProps) => {
   const [totalComments, setTotalComments] = useState<number>(0);
 
   useEffect(() => {
@@ -37,7 +42,11 @@ const CommentButton = ({ userId, threadId }: CommentButtonProps) => {
       </DialogTrigger>
       <DialogContent>
         <DialogTitle className="px-4">Comment this thread</DialogTitle>
-        <CommentForm userId={userId} threadId={threadId} />
+        <CommentForm
+          userId={userId}
+          threadId={threadId}
+          retrieveId={retrieveId}
+        />
       </DialogContent>
     </Dialog>
   );

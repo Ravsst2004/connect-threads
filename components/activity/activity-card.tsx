@@ -9,6 +9,7 @@ interface ActivityCardProps {
   username?: string | null;
   createdAt?: Date | null;
   userImage: string | null;
+  type: string;
 }
 
 const ActivityCard = async ({
@@ -16,6 +17,7 @@ const ActivityCard = async ({
   username,
   createdAt,
   userImage,
+  type,
 }: ActivityCardProps) => {
   const formattedDate = createdAt
     ? formatDistanceToNow(new Date(createdAt), { addSuffix: true })
@@ -51,6 +53,7 @@ const ActivityCard = async ({
             </div>
           </div>
           <div id="content" className="py-2">
+            {type === "comment" && <p>Commented on your post</p>}
             <p>{content}</p>
           </div>
         </div>

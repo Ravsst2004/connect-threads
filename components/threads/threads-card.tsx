@@ -16,7 +16,7 @@ interface ThreadsCardProps {
   username: string | null;
   threadId: string;
   userId?: string;
-  senderEmail?: string | null;
+  senderEmail: string | null;
   userCommentId?: string | null | undefined;
 }
 
@@ -99,6 +99,7 @@ const ThreadsCard = ({
           <CommentButton
             userId={userCommentId as string}
             threadId={threadId as string}
+            retrieveId={userId as string}
           />
           <IoIosRepeat className="h-7 w-7" />
           <IoIosSend className="h-7 w-7" />

@@ -45,8 +45,6 @@ const DetailThread = async ({ params }: DetailThreadProps) => {
     return notFound();
   }
 
-  console.log(detailThread);
-
   return (
     <section>
       <ThreadsCard
@@ -57,7 +55,7 @@ const DetailThread = async ({ params }: DetailThreadProps) => {
         userImage={detailThread?.author?.image as string}
         content={detailThread?.content as string}
         userCommentId={commentUser?.id}
-        senderEmail={session?.user?.email}
+        senderEmail={session?.user?.email as string}
       />
       <div className="px-4 pb-20">
         {detailThread?.comments && detailThread.comments.length > 0 && (
