@@ -24,6 +24,8 @@ const ThreadsContent = async ({ username }: ThreadsContentProps) => {
     },
   });
 
+  console.log(user);
+
   return (
     <div>
       <Tabs defaultValue="threads">

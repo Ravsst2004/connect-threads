@@ -45,12 +45,15 @@ const DetailThread = async ({ params }: DetailThreadProps) => {
     return notFound();
   }
 
+  console.log(detailThread);
+
   return (
     <section>
       <ThreadsCard
         username={username}
         threadId={threadId}
         userId={user.id}
+        images={detailThread?.images as string[]}
         userImage={detailThread?.author?.image as string}
         content={detailThread?.content as string}
         userCommentId={commentUser?.id}
