@@ -2,7 +2,7 @@ import AllThreads from "@/components/threads/all-threads";
 
 const Home = () => {
   return (
-    <section>
+    <section className="">
       <AllThreads />
     </section>
   );

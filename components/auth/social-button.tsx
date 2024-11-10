@@ -6,7 +6,7 @@ export const GoogleButton = () => {
     <form
       action={async () => {
         "use server";
-        await signIn("google", { redirectTo: "/profile" });
+        await signIn("google", { redirectTo: "/" });
       }}
     >
       <button

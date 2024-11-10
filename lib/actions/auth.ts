@@ -74,17 +74,17 @@ export async function login(
   const { email, password } = values;
 
   try {
-    const result = await signIn("credentials", {
+    await signIn("credentials", {
       email,
       password,
-      redirect: false,
+      
     });
 
-    if (result?.error) {
-      return {
-        message: "Invalid credentials",
-      };
-    }
+    // if (result?.error) {
+    //   return {
+    //     message: "Invalid credentials",
+    //   };
+    // }
 
     window.location.reload();
   } catch (error) {
