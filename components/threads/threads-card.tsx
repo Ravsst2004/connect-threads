@@ -1,5 +1,4 @@
 import { IoIosHeartEmpty, IoIosRepeat } from "react-icons/io";
-import { IoIosSend } from "react-icons/io";
 import Image from "next/image";
 import Link from "next/link";
 import MoreThreadsCardFeatures from "./more-threads-card-features";
@@ -7,6 +6,7 @@ import HorizontalLine from "../ui/horizontal-line";
 import { formatDistanceToNow } from "date-fns";
 import LikeButton from "./like-button";
 import CommentButton from "./comment-button";
+import ShareButton from "./share-button";
 
 interface ThreadsCardProps {
   images?: string[];
@@ -102,7 +102,7 @@ const ThreadsCard = ({
             retrieveId={userId as string}
           />
           <IoIosRepeat className="h-7 w-7" />
-          <IoIosSend className="h-7 w-7" />
+          <ShareButton url={`/@${username}/post/${threadId}`} title={content} />
         </div>
       </article>
     </section>

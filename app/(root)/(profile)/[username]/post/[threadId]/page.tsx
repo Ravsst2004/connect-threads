@@ -41,7 +41,7 @@ const DetailThread = async ({ params }: DetailThreadProps) => {
     },
   });
 
-  if (!user) {
+  if (!user || !detailThread) {
     return notFound();
   }
 
