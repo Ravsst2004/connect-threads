@@ -101,6 +101,8 @@ model Comment {
 
   user   User   @relation(fields: [userId], references: [id])
   thread Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, threadId])
 }
 
 model Follow {

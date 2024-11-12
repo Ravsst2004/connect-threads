@@ -2,8 +2,6 @@ import { Ellipsis } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import DeleteButton from "./delete-button";
@@ -12,12 +10,17 @@ import { prisma } from "@/prisma/db";
 
 interface MoreThreadsCardFeaturesProps {
   threadId?: string;
+  userId?: string;
+  commenterThreadId?: string;
 }
 
 const MoreThreadsCardFeatures = async ({
   threadId,
+  userId,
+  commenterThreadId,
 }: MoreThreadsCardFeaturesProps) => {
   const session = await auth();
+
   if (!session) {
     return null;
   }
@@ -28,10 +31,18 @@ const MoreThreadsCardFeatures = async ({
     },
     include: {
       threads: true,
+      comments: {
+        include: {
+          user: true,
+        },
+      },
     },
   });
 
   const isOwner = user?.threads?.some((thread) => thread.id === threadId);
+  const isUserCommenter = user?.comments?.some(
+    (comment) => comment.userId === userId
+  );
 
   return (
     <div>
@@ -40,7 +51,14 @@ const MoreThreadsCardFeatures = async ({
           <Ellipsis />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          {isOwner && <DeleteButton threadId={threadId} />}
+          {(isOwner || isUserCommenter) && (
+            <DeleteButton
+              threadId={threadId}
+              commentUserId={userId}
+              commenterThreadId={commenterThreadId}
+              userId={user?.id}
+            />
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

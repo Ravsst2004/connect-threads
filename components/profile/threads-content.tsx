@@ -29,8 +29,6 @@ const ThreadsContent = async ({ username }: ThreadsContentProps) => {
     },
   });
 
-  console.log(user);
-
   return (
     <div>
       <Tabs defaultValue="threads">
@@ -67,12 +65,7 @@ const ThreadsContent = async ({ username }: ThreadsContentProps) => {
           )}
         </TabsContent>
         <TabsContent value="reply">
-          {user?.threads && user.threads.length > 0 ? (
-            <ReplyList />
-          ) : (
-            <div>No Threads</div>
-          )}
-          {/* <ReplyList /> */}
+          {user && session ? <ReplyList /> : <div>No Threads</div>}
         </TabsContent>
       </Tabs>
     </div>

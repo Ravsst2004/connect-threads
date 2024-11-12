@@ -254,7 +254,6 @@ export async function createComment(
     });
 
     revalidatePath(`/`, "layout");
-
     return thread;
   } catch (error) {
     console.error("Error creating thread:", error);
@@ -268,5 +267,45 @@ export async function getTotalThreadComments(threadId: string) {
     select: { totalComments: true },
   });
 
+  revalidatePath(`/`, "layout");
+
   return thread?.totalComments || 0;
+}
+
+export async function deleteComment(
+  commentUserId: string,
+  commenterThreadId: string,
+  userId: string
+) {
+  try {
+    await prisma.comment.delete({
+      where: {
+        userId_threadId: {
+          userId: commentUserId,
+          threadId: commenterThreadId,
+        },
+      },
+    });
+
+    await prisma.thread.update({
+      where: {
+        id: commenterThreadId,
+      },
+      data: {
+        totalComments: {
+          decrement: 1,
+        },
+      },
+    });
+
+    // !!! DELETE NOTIFICATION NOT WORKING
+    // TODO: FIX THIS NOTIFICATION DELETE
+    await prisma.notification.deleteMany({
+      where: { userId, senderId: commentUserId },
+    });
+  } catch (error) {
+    console.log("Failed to delete", error);
+  }
+
+  revalidatePath("/", "layout");
 }

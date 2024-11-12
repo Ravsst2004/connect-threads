@@ -37,7 +37,7 @@ const ReplyList = async () => {
     },
   });
 
-  console.log("Comments fetched:", comments);
+  // console.log("Comments fetched:", comments);
 
   if (comments.length === 0) {
     console.log("Tidak ada komentar yang ditemukan untuk user:", user.username);
@@ -75,7 +75,10 @@ const ReplyList = async () => {
                       </span>
                     </h1>
                   </div>
-                  <MoreThreadsCardFeatures threadId={comment.threadId} />
+                  <MoreThreadsCardFeatures
+                    userId={user.id}
+                    commenterThreadId={comment.threadId}
+                  />
                 </div>
                 <Link
                   href={`/@${comment.thread.author.username}/post/${comment.threadId}`}
