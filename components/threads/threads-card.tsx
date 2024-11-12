@@ -1,4 +1,4 @@
-import { IoIosHeartEmpty, IoIosRepeat } from "react-icons/io";
+import { IoIosHeartEmpty } from "react-icons/io";
 import Image from "next/image";
 import Link from "next/link";
 import MoreThreadsCardFeatures from "./more-threads-card-features";
@@ -101,7 +101,6 @@ const ThreadsCard = ({
             threadId={threadId as string}
             retrieveId={userId as string}
           />
-          <IoIosRepeat className="h-7 w-7" />
           <ShareButton url={`/@${username}/post/${threadId}`} title={content} />
         </div>
       </article>

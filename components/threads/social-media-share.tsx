@@ -9,7 +9,7 @@ import {
   EmailShareButton,
 } from "react-share";
 import { FaFacebook, FaWhatsapp, FaTwitter, FaLinkedin } from "react-icons/fa";
-import { SiGmail, SiDiscord } from "react-icons/si";
+import { SiGmail } from "react-icons/si";
 
 type SocialMediaSite =
   | "facebook"
