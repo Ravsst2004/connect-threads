@@ -1,4 +1,4 @@
-### **This project is a duplication of the Thread web by Meta that I used to practice my NextJS skills. I stopped this project because of my mistake in designing the database, where I designed a database while building a feature. So this project is stopped. Next I will design the database properly before coding.**
+### **This project is a duplication of the Thread web by Meta that I used to practice my NextJS skills. I stopped this project because of my mistake in designing the database, where I designed a database while building a feature. So this project is stopped. Next I will design the database properly before coding. But most of features work properly.**
 
 
 ## Getting Started
