@@ -275,7 +275,7 @@ export async function getTotalThreadComments(threadId: string) {
 export async function deleteComment(
   commentUserId: string,
   commenterThreadId: string,
-  userId: string
+  threadId: string
 ) {
   try {
     await prisma.comment.delete({
@@ -298,10 +298,8 @@ export async function deleteComment(
       },
     });
 
-    // !!! DELETE NOTIFICATION NOT WORKING
-    // TODO: FIX THIS NOTIFICATION DELETE
     await prisma.notification.deleteMany({
-      where: { userId, senderId: commentUserId },
+      where: { senderId: commentUserId, threadId: threadId },
     });
   } catch (error) {
     console.log("Failed to delete", error);

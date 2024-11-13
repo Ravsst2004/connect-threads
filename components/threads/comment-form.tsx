@@ -81,7 +81,7 @@ const CommentForm = ({ userId, threadId, retrieveId }: CommentFormProps) => {
   };
 
   return (
-    <section className="px-2">
+    <section>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 py-2">
           <FormField

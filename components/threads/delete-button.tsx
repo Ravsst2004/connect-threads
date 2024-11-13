@@ -46,7 +46,7 @@ const DeleteButton = ({
           await deleteComment(
             commentUserId as string,
             commenterThreadId as string,
-            userId as string
+            threadId as string
           );
           return;
         }

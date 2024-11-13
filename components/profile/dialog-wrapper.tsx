@@ -10,11 +10,18 @@ import {
 import { buttonVariants } from "../ui/button";
 
 interface DialogWrapperProps {
-  triggerText: string;
+  dialogTrigerContent: React.ReactElement;
   children: React.ReactElement;
+  dialogTriggerClassname?: string;
+  dialogTitle?: string;
 }
 
-const DialogWrapper = ({ triggerText, children }: DialogWrapperProps) => {
+const DialogWrapper = ({
+  dialogTrigerContent,
+  children,
+  dialogTriggerClassname,
+  dialogTitle,
+}: DialogWrapperProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleClose = () => {
@@ -25,13 +32,13 @@ const DialogWrapper = ({ triggerText, children }: DialogWrapperProps) => {
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger
         onClick={() => setIsDialogOpen(true)}
-        className={`${buttonVariants({ variant: "default" })} mt-4 w-full`}
+        className={dialogTriggerClassname}
       >
-        {triggerText}
+        {dialogTrigerContent}
       </DialogTrigger>
       <DialogContent aria-describedby="dialog-description">
         <DialogHeader>
-          <DialogTitle className="flex justify-start">Edit Profile</DialogTitle>
+          <DialogTitle className="flex justify-start">{dialogTitle}</DialogTitle>
         </DialogHeader>
         {React.cloneElement(children, { onClose: handleClose })}
       </DialogContent>
