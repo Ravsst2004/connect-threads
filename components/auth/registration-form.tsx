@@ -24,7 +24,7 @@ const RegistrationForm = () => {
   const form = useForm<z.infer<typeof registrationSchema>>({
     resolver: zodResolver(registrationSchema),
     defaultValues: {
-      name: "Jro Datuk Putra",
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",

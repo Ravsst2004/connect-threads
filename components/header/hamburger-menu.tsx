@@ -19,9 +19,6 @@ const HamburgerMenu = async () => {
           <Menu className="w-8 h-8 cursor-pointer" aria-hidden="true" />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="mr-2 mt-2">
-          <DropdownMenuItem className="cursor-pointer">
-            Settings
-          </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer px-0">
             <ToggleTheme />
           </DropdownMenuItem>

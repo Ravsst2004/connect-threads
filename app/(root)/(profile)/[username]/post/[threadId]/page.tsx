@@ -62,8 +62,6 @@ const DetailThread = async ({ params }: DetailThreadProps) => {
           <>
             <h1 className="text-xl uppercase font-bold">Reply</h1>
             {detailThread.comments.map((comment) => {
-              console.log(comment);
-
               return (
                 <ListComment
                   key={comment.id}
